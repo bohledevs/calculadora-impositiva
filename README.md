@@ -26,8 +26,8 @@ rectangle "Calculadora Impositiva" {
   usecase "Calcular impuestos nacionales" as UC1
   usecase "Calcular impuestos provinciales" as UC2
   usecase "Evaluar condición fiscal" as UC3
-  UC3 .up.> UC1 : <<extends>>
-  UC3 .up.> UC2 : <<extends>>
+  UC3 <.up. UC1 : <<includes>>
+  UC3 <.up. UC2 : <<includes>>
 }
 vd -down-> UC1
 vd -down-> UC2
