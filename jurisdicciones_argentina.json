@@ -4,7 +4,7 @@
   "impuestos": ["IVA", "Ganancias"],
   "sub_jurisdicciones": [
     {
-      "jurisdiccion": "Ciudad Aut�noma de Buenos Aires",
+      "jurisdiccion": "Ciudad Autonoma de Buenos Aires",
       "id": 0,
       "impuestos": ["IIBB"],
       "sub_jurisdicciones": []
@@ -34,7 +34,7 @@
       "sub_jurisdicciones": []
     },
     {
-      "jurisdiccion": "C�rdoba",
+      "jurisdiccion": "Cordoba",
       "id": 5,
       "impuestos": ["IIBB"],
       "sub_jurisdicciones": []
@@ -46,7 +46,7 @@
       "sub_jurisdicciones": []
     },
     {
-      "jurisdiccion": "Entre R�os",
+      "jurisdiccion": "Entre Rios",
       "id": 7,
       "impuestos": ["IIBB"],
       "sub_jurisdicciones": []
@@ -88,13 +88,13 @@
       "sub_jurisdicciones": []
     },
     {
-      "jurisdiccion": "Neuqu�n",
+      "jurisdiccion": "Neuquen",
       "id": 14,
       "impuestos": ["IIBB"],
       "sub_jurisdicciones": []
     },
     {
-      "jurisdiccion": "R�o Negro",
+      "jurisdiccion": "Rio Negro",
       "id": 15,
       "impuestos": ["IIBB"],
       "sub_jurisdicciones": []
@@ -142,7 +142,7 @@
       "sub_jurisdicciones": []
     },
     {
-      "jurisdiccion": "Tucum�n",
+      "jurisdiccion": "Tucumun",
       "id": 23,
       "impuestos": ["IIBB"],
       "sub_jurisdicciones": []
