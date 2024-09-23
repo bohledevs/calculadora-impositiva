@@ -18,7 +18,7 @@ def crearMatrizAlicuotas():
             fila = [valores[2], valores[1], valores[0]] 
 
         matriz.append(fila)
-
+        
     
     imprimirMatriz(matriz)
 
@@ -58,3 +58,41 @@ def imprimirMatriz(matriz):
 
 
 crearMatrizAlicuotas()
+
+
+# Ingreso de datos del usuario
+def obtener_entrada():
+    
+    monto = int(input("Ingrese el monto: "))
+    
+    while monto < 1:
+        monto = int(input("Ingrese un monto correcto: "))
+        
+    condicion_fiscal_iva = int(input("Cual es su condicion fiscal frente al IVA? \n 1. Exento \n 2. Responsable inscripto \n 3. Consumidor final"))
+    
+    while condicion_fiscal_iva < 1 and condicion_fiscal_iva > 3:
+        condicion_fiscal_iva = int(input("Ingrese una condicion fiscal valida: \n 1. Exento \n 2. Responsable inscripto \n 3. Consumidor final"))
+
+    if condicion_fiscal_iva == 1 :
+        condicion_fiscal_iva = "Exento"
+    elif condicion_fiscal_iva == 2 :
+        condicion_fiscal_iva = "Responsable inscripto"
+    else:
+        condicion_fiscal_iva = "Consumidor final"
+
+
+    
+    condicion_fiscal_iibb = int(input("Cual es su condicion fiscal frente a Ingresos Brutos? \n 1. Local \n 2. Multilateral \n 3. No inscripto"))
+
+    while condicion_fiscal_iibb < 1 and condicion_fiscal_iibb > 3:
+        condicion_fiscal_iibb = int(input("Ingrese una condicion fiscal valida: \n 1. Local \n 2. Multilateral \n 3. No inscripto"))
+        
+    if condicion_fiscal_iibb == 1 :
+        condicion_fiscal_iibb = "Local"
+    elif condicion_fiscal_iibb == 2 :
+        condicion_fiscal_iibb = "Multilateral"
+    else:
+        condicion_fiscal_iibb = "No inscripto"
+        
+    
+        
