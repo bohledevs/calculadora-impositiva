@@ -26,10 +26,6 @@ def obtener_datos_usuario():
     
     return datos
 
-# Llamar a la función y mostrar el resultado
-datos_usuario = obtener_datos_usuario()
-print("Datos del usuario:", datos_usuario)
-
 #tupla de provincias arg
 provincias_argentina = (
     "Buenos Aires",
@@ -57,7 +53,6 @@ provincias_argentina = (
     "Tucumán"
 )
 
-print(provincias_argentina)
 def crearMatrizAlicuotas():
 
     matriz = []
@@ -113,10 +108,6 @@ def imprimirMatriz(matriz):
     for fila in matriz:
         print("{:<10.1f} {:<10.1f} {:<10.1f}".format(fila[0], fila[1], fila[2]))
 
-
-crearMatrizAlicuotas()
-
-
 # Ingreso de datos del usuario
 def obtener_entrada():
     
@@ -151,5 +142,8 @@ def obtener_entrada():
     else:
         condicion_fiscal_iibb = "No inscripto"
         
-    
-       
+
+## PROGRAMA PRINCIPAL
+datos_transaccion = obtener_entrada()
+impuestos_aplicados = calcular_impuestos(datos_transaccion)
+imprimir_resumen(datos_transaccion, impuestos_aplicados)
