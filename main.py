@@ -31,6 +31,21 @@ def generarValoresAlicoutas():
     return alicouta
 
 
+# Funcion para calcular IVA
+def calcularIva(monto, IVA):
+    
+    impuesto_iva = (monto * IVA) / 100
+
+    return impuesto_iva
+
+# Funcion para calcular impuesto a las ganancias
+
+def  calcularGanancias(monto, ganancias):
+    
+    impuesto_ganancias = (monto * ganancias) / 100
+
+    return impuesto_ganancias
+
 # Funcion para imprimir matriz - (A cambiar para que quede mejor visualmente)
 def imprimirMatriz(matriz):
     print("Matriz de Alicuotas:")
