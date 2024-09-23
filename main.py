@@ -1,5 +1,57 @@
 import random
-print("Hola mundo")
+
+# Recibe los datos del usuario y retorna los impuestos aplicados
+def calcular_impuestos(datos_transaccion):
+    impuestos_aplicados = []
+    impuestos_nacionales = calcular_nacionales(datos_transaccion)
+    impuestos_provinciales = calcular_provinciales(datos_transaccion)
+    impuestos_aplicados.append(calcular_nacionales)
+    impuestos_aplicados.append(calcular_provinciales)
+    return impuestos_aplicados
+
+#funcion que pida al usuario los datos y los retorne al diccionario
+def obtener_datos_usuario():
+    # Crear el diccionario
+    datos = {}
+    
+    # Pedir datos al usuario
+    nombre = input("Ingrese su nombre: ")
+    edad = input("Ingrese su edad: ")
+    email = input("Ingrese su correo electrónico: ")
+    
+    # Almacenar los datos en el diccionario
+    datos["Nombre"] = nombre
+    datos["edad"] = edad
+    datos["email"] = email
+    
+    return datos
+
+#tupla de provincias arg
+provincias_argentina = (
+    "Buenos Aires",
+    "Catamarca",
+    "Chaco",
+    "Chubut",
+    "Córdoba",
+    "Corrientes",
+    "Entre Ríos",
+    "Formosa",
+    "Jujuy",
+    "La Pampa",
+    "La Rioja",
+    "Mendoza",
+    "Misiones",
+    "Neuquén",
+    "Río Negro",
+    "Salta",
+    "San Juan",
+    "San Luis",
+    "Santa Cruz",
+    "Santa Fe",
+    "Santiago del Estero",
+    "Tierra del Fuego",
+    "Tucumán"
+)
 
 def crearMatrizAlicuotas():
 
@@ -56,10 +108,6 @@ def imprimirMatriz(matriz):
     for fila in matriz:
         print("{:<10.1f} {:<10.1f} {:<10.1f}".format(fila[0], fila[1], fila[2]))
 
-
-crearMatrizAlicuotas()
-
-
 # Ingreso de datos del usuario
 def obtener_entrada():
     
@@ -94,5 +142,8 @@ def obtener_entrada():
     else:
         condicion_fiscal_iibb = "No inscripto"
         
-    
-        
+
+## PROGRAMA PRINCIPAL
+datos_transaccion = obtener_entrada()
+impuestos_aplicados = calcular_impuestos(datos_transaccion)
+imprimir_resumen(datos_transaccion, impuestos_aplicados)
