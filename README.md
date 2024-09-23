@@ -42,7 +42,7 @@
 ![Impuestos nacionales](./diagramas/impuestos-nacionales.png)
 
 #### Impuestos provinciales
-- Los impuestos provinciales se aplican en base al régimen IIBB (*__reg__*) ingresado por pantalla. Pueden tomar tres valores:
+- Los impuestos provinciales se aplican en base al régimen o o condición fiscal IIBB (*__cf__*) ingresada por pantalla. Pueden tomar tres valores:
 1. No Inscripto: El usuario no está inscripto en ningún régimen. Aplica la alícuota más alta.
 2. Local: El usuario está inscripto sólo en su provincia, aplica una alícuota intermedia.
 3. Multilateral: El usuario está inscripto en varias provincias,
@@ -54,6 +54,6 @@ aplica la alícuota de menor magnitud.
 
 - Las alicuotas de cada provincia se extraen de la matriz de jurisdicciones
 - Cada fila de la matriz representa una provincia, notada por ID de jurisdicción.
-- Cada columna de la matriz, representa un régimen
+- Cada columna de la matriz, representa una condición fiscal IIBB
 
 ![Matriz](./diagramas/matriz.png)
