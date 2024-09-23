@@ -34,6 +34,20 @@ vd -down-> UC2
 @enduml
 ```
 
+### Contrato
+
+#### Entrada
+- El usuario ingresará los siguientes datos de entrada:
+
+![Entrada](./diagramas/contrato-entrada.png)
+
+#### Salida
+
+- El usuario visualizará los siguientes datos en la pantalla:
+
+![Salida](./diagramas/contrato-salida.png)
+
+
 ### Reglas de negocio
 
 #### Impuestos nacionales
