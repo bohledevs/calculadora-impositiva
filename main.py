@@ -85,38 +85,7 @@ def obtener_entrada():
     datos_transaccion[LLAVE_PROVINCIA] = provincia
 
     return datos_transaccion
-        
-
-#funcion que pida al usuario los datos y los retorne al diccionario
-def obtener_datos_usuario():
-    # Crear el diccionario
-    datos = {}
     
-    # Pedir datos al usuario
-    nombre = input("Ingrese su nombre: ")
-    edad = input("Ingrese su edad: ")
-    email = input("Ingrese su correo electrónico: ")
-    
-    # Almacenar los datos en el diccionario
-    datos["Nombre"] = nombre
-    datos["edad"] = edad
-    datos["email"] = email
-    
-    return datos
-
-
-
-    datos_transaccion[LLAVE_CF_IIBB] = condicion_fiscal_iibb
-    
-    indice_provincia = int(input(f"Ingrese el número correspondiente a su provincia: \n{imprimir_tupla(provincias_argentina)} Nro. de Provincia \n Respuesta: "))
-    while indice_provincia < 1 or indice_provincia > 23:
-       indice_provincia = int(input(f"Ingrese un número válido: \n{imprimir_tupla(provincias_argentina)} Nro. de Provincia \n Respuesta: "))
-    provincia = provincias_argentina[indice_provincia-1]
-
-    datos_transaccion[LLAVE_PROVINCIA] = provincia
-    
-    return datos_transaccion
-
 
 # Imprime tuplas, numeradas por su indice
 # Se ingresa una tupla y se imprime en pantalla
@@ -367,8 +336,6 @@ def imprimir_resumen(datos_transaccion, impuestos_aplicados):
 ## PROGRAMA PRINCIPAL
 datos_transaccion = obtener_entrada()
 impuestos_aplicados = calcular_impuestos(datos_transaccion)
-# print(datos_transaccion)
-# print(impuestos_aplicados)
 imprimir_resumen(datos_transaccion, impuestos_aplicados)
 
  
