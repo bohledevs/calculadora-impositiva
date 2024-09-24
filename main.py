@@ -1,13 +1,91 @@
+
+import json
 import random
 
-# Recibe los datos del usuario y retorna los impuestos aplicados
-def calcular_impuestos(datos_transaccion):
-    impuestos_aplicados = []
-    impuestos_nacionales = calcular_nacionales(datos_transaccion)
-    impuestos_provinciales = calcular_provinciales(datos_transaccion)
-    impuestos_aplicados.append(calcular_nacionales)
-    impuestos_aplicados.append(calcular_provinciales)
-    return impuestos_aplicados
+def crearMatrizAlicuotas():
+
+    matriz = []
+    filas = 23
+    columnas = 3
+
+    for i in range (filas):
+        fila = []
+        for j in range(columnas):
+            # Generar valores de alicoutas random y ordenarlos de mayor a menos
+            valores = [generarValoresAlicoutas() for _ in range(3)]
+            valores.sort()
+
+            #  Agregar los valores a la fila
+            fila = [valores[2], valores[1], valores[0]] 
+
+        matriz.append(fila)
+        
+    
+    imprimirMatriz(matriz)
+
+# Llaves de la entrada
+LLAVE_CF_IVA = "condicion_fiscal_iva"
+LLAVE_CF_IIBB = "condicion_fiscal_iibb"
+LLAVE_MONTO = "monto"
+LLAVE_PROVINCIA = "provincia"
+
+
+# Llaves de la salida
+LLAVE_TASA = "tasa"
+LLAVE_IMPUESTO = "impuesto"
+LLAVE_TITULO = "titulo"
+
+
+# El usuario ingresa los datos requeridos en la pantalla.
+# La función encapsula los datos en un diccionario, y lo retorna.
+def obtener_entrada():
+    
+    datos_transaccion = {}
+
+    monto = int(input("Ingrese el monto: "))
+    
+    while monto < 1:
+        monto = int(input("Ingrese un monto correcto: "))
+        
+    datos_transaccion[LLAVE_MONTO] = monto 
+
+    condicion_fiscal_iva = int(input("Cual es su condicion fiscal frente al IVA? \n 1. Exento \n 2. Responsable inscripto \n 3. Consumidor final: \n Respuesta: "))
+    
+    while condicion_fiscal_iva < 1 or condicion_fiscal_iva > 3:
+        condicion_fiscal_iva = int(input("Ingrese una condicion fiscal valida: \n 1. Exento \n 2. Responsable inscripto \n 3. Consumidor final \n Respuesta: "))
+
+    if condicion_fiscal_iva == 1 :
+        condicion_fiscal_iva = "Exento"
+    elif condicion_fiscal_iva == 2 :
+        condicion_fiscal_iva = "Responsable Inscripto"
+    else:
+        condicion_fiscal_iva = "Consumidor Final"
+    
+    datos_transaccion[LLAVE_CF_IVA] = condicion_fiscal_iva
+
+    condicion_fiscal_iibb = int(input("Cual es su condicion fiscal frente a Ingresos Brutos? \n 1. Local \n 2. Multilateral \n 3. No inscripto \n Respuesta: "))
+
+    while condicion_fiscal_iibb < 1 or condicion_fiscal_iibb > 3:
+        condicion_fiscal_iibb = int(input("Ingrese una condicion fiscal valida: \n 1. Local \n 2. Multilateral \n 3. No inscripto \n Respuesta: "))
+        
+    if condicion_fiscal_iibb == 1 :
+        condicion_fiscal_iibb = "Local"
+    elif condicion_fiscal_iibb == 2 :
+        condicion_fiscal_iibb = "Multilateral"
+    else:
+        condicion_fiscal_iibb = "No inscripto"
+        
+    datos_transaccion[LLAVE_CF_IIBB] = condicion_fiscal_iibb
+    
+    indice_provincia = int(input(f"Ingrese el número correspondiente a su provincia: \n {imprimir_tupla(provincias_argentina)} \n Respuesta: "))
+    while indice_provincia < 1 or indice_provincia > 23:
+        indice_provincia = int(input(f"Ingrese el número correspondiente a su provincia válido: \n {imprimir_tupla(provincias_argentina)} \n Respuesta: "))
+    provincia = provincias_argentina[indice_provincia-1]
+
+    datos_transaccion[LLAVE_PROVINCIA] = provincia
+
+    return datos_transaccion
+        
 
 #funcion que pida al usuario los datos y los retorne al diccionario
 def obtener_datos_usuario():
@@ -26,7 +104,31 @@ def obtener_datos_usuario():
     
     return datos
 
-#tupla de provincias arg
+
+
+    datos_transaccion[LLAVE_CF_IIBB] = condicion_fiscal_iibb
+    
+    indice_provincia = int(input(f"Ingrese el número correspondiente a su provincia: \n{imprimir_tupla(provincias_argentina)} Nro. de Provincia \n Respuesta: "))
+    while indice_provincia < 1 or indice_provincia > 23:
+       indice_provincia = int(input(f"Ingrese un número válido: \n{imprimir_tupla(provincias_argentina)} Nro. de Provincia \n Respuesta: "))
+    provincia = provincias_argentina[indice_provincia-1]
+
+    datos_transaccion[LLAVE_PROVINCIA] = provincia
+    
+    return datos_transaccion
+
+
+# Imprime tuplas, numeradas por su indice
+# Se ingresa una tupla y se imprime en pantalla
+def imprimir_tupla(tupla):
+    resultado = ""
+    for indice, elemento in enumerate(tupla):
+        resultado += f"{indice + 1}. {elemento}\n"
+    return resultado
+
+
+
+# Tupla de provincias argentinas
 provincias_argentina = (
     "Buenos Aires",
     "Catamarca",
@@ -53,6 +155,147 @@ provincias_argentina = (
     "Tucumán"
 )
 
+
+condiciones_iibb = (
+    "Local",
+    "Multilateral",
+    "No inscripto"
+)
+
+# Función para imprimir el diccionario completo en pantalla
+#Ingresa un diccionario que representa una jurisdiccion.
+def imprimir_jurisdicciones_simplificado(jurisdiccion, nivel=0):
+    print(f"Jurisdicción: {jurisdiccion['jurisdiccion']}")
+    print(f"ID: {jurisdiccion['id']}")
+    print(f"Impuestos: {', '.join(jurisdiccion['impuestos'])}")
+    if jurisdiccion['sub_jurisdicciones']:
+        print("Sub-jurisdicciones:")
+        for sub in jurisdiccion['sub_jurisdicciones']:
+            imprimir_jurisdicciones_simplificado(sub, nivel + 1)
+
+#funcion para obtener los impuestos de una provincia especifica.
+#Ingresa el diccionario de jurisdicciones y retorna una lista de impuestos aplicados a la provincia encontrada.
+def obtener_impuestos_provincia(jurisdicciones, provincia):
+    data = jurisdicciones.get("sub_jurisdicciones")
+
+    for i in range(len(data)):
+
+        if data[i].get("jurisdiccion") == provincia:
+            impuestos = data[i].get("impuestos")
+            return impuestos
+
+#funcion para imprimir el resumen de una transaccion.
+#Ingresa un diccionario con los datos de la transacción y una lista con los impuestos aplicados
+def imprimir_resumen(transaccion, saldo):
+    fecha = transaccion.get('fecha', 'Sin Fecha')
+    descripcion = transaccion.get('descripcion', 'Sin Descripcion')
+    monto = transaccion.get('monto', 0.0)
+    cliente = transaccion.get('cliente', 'Sin Cliente')
+    IVA = transaccion.get('IVA', 0.0)
+    ganacias = transaccion.get('ganancias', 0.0)
+    iibb = transaccion.get('iibb', 0.0)
+
+    #Resumen de la Transacción
+    print(f"Resumen de la Transacción:")
+    print(f'Fecha: {fecha}')
+    print(f'Descripcion: {descripcion}')
+    print(f'Cliente: {cliente}')
+    print(f"Monto total de la transacción: {monto}")
+
+    #Detalles Impositivos
+    print("\nDetalles Impositivos:")
+    print(f"IVA: {IVA}")
+    print(f"Ganancias: {ganacias}")
+    print(f"IIBB: {iibb}")
+    
+    #Total de impuestos
+    total_impuestos = IVA + ganacias + iibb
+    print(f"Total de Impuestos: {total_impuestos}")
+
+    #Monto Final
+    monto_final = monto + total_impuestos
+    print(f"Monto Final: {monto_final}")
+
+
+# Recibe los datos del usuario y retorna los impuestos aplicados
+# Ingresa un diccionario con los datos de la transacción y retorna una lista con los impuestos aplicados
+def calcular_impuestos(datos_transaccion):
+    return calcular_nacionales(datos_transaccion) + calcular_provinciales(datos_transaccion)
+
+#Calcula los impuestos nacionales
+#Ingresa un diccionario con los datos de la transacción y retorna una lista con los impuestos nacionales
+def calcular_nacionales(datos_transaccion):
+    condicion_fiscal_iva = datos_transaccion.get(LLAVE_CF_IVA)
+    monto = datos_transaccion.get(LLAVE_MONTO)
+    return [calcular_iva(monto, condicion_fiscal_iva), calcular_ganancias(monto, condicion_fiscal_iva)]
+
+# Funcion para calcular IVA
+#Ingresa el monto de la transacción y la condición fiscal del cliente y retorna un diccionario con el impuesto aplicado
+def calcular_iva(monto, cf):
+    
+    resumen = {}
+
+    tasa = 0
+    if (cf == "Responsable Inscripto"):
+        tasa = 10.5
+    elif (cf == "Consumidor Final"):
+        tasa = 21.0
+    resumen[LLAVE_TASA] = tasa
+
+    impuesto_aplicado = monto * (tasa/100)
+    resumen[LLAVE_IMPUESTO] = impuesto_aplicado
+    resumen[LLAVE_TITULO] = "IVA"
+
+    return resumen
+
+# Funcion para calcular IVA
+#Ingresa el monto de la transacción y la condición fiscal del cliente y retorna un diccionario con el impuesto aplicado
+def calcular_ganancias(monto, cf):
+    
+    resumen = {}
+    resumen[LLAVE_TITULO] = "Ganancias"
+
+    tasa = 0
+    if (cf == "Responsable Inscripto"):
+        tasa = 0.5
+    elif (cf == "Consumidor Final"):
+        tasa = 2.0
+    resumen[LLAVE_TASA] = tasa
+
+    impuesto_aplicado = monto * (tasa/100)
+    resumen[LLAVE_IMPUESTO] = impuesto_aplicado
+
+    return resumen
+
+#Calcula los impuestos provinciales
+#Ingresa un diccionario con los datos de la transacción y retorna una lista con los impuestos provinciales
+def calcular_provinciales(datos_transaccion):
+    condicion_fiscal_iibb = datos_transaccion.get(LLAVE_CF_IIBB)
+    monto = datos_transaccion.get(LLAVE_MONTO)
+    provincia = datos_transaccion.get(LLAVE_PROVINCIA)
+    return [calcular_iibb(monto, condicion_fiscal_iibb, provincia)]
+
+#Calcula el impuesto de Ingresos Brutos
+#Ingresa el monto de la transaccion, la condicion fiscal del cliente y la provincia y retorna un diccionario con el impuesto aplicado
+def calcular_iibb(monto, cf, provincia):
+
+    resumen = {}
+    resumen[LLAVE_TITULO] = "IIBB"
+
+    matriz = crearMatrizAlicuotas()
+    indice_jurisdiccion = provincias_argentina.index(provincia)
+    indice_cf = condiciones_iibb.index(cf)
+    
+    tasa = matriz[indice_jurisdiccion][indice_cf]
+    resumen[LLAVE_TASA] = tasa
+
+    impuesto_aplicado = monto * (tasa/100)
+    resumen[LLAVE_IMPUESTO] = impuesto_aplicado
+
+    return resumen
+
+#Genera un valor de alícuota ficticio.
+#Retorna un valor de alícuota entre 0.2 y 7.0
 def crearMatrizAlicuotas():
 
     matriz = []
@@ -70,10 +313,7 @@ def crearMatrizAlicuotas():
             fila = [valores[2], valores[1], valores[0]] 
 
         matriz.append(fila)
-        
-    
-    imprimirMatriz(matriz)
-
+    return matriz
 
 # Funcion para generar valores de alicuotas ficticios
 def generarValoresAlicoutas():
@@ -82,23 +322,8 @@ def generarValoresAlicoutas():
 
     return alicouta
 
-
-# Funcion para calcular IVA
-def calcularIva(monto, IVA):
-    
-    impuesto_iva = (monto * IVA) / 100
-
-    return impuesto_iva
-
-# Funcion para calcular impuesto a las ganancias
-
-def  calcularGanancias(monto, ganancias):
-    
-    impuesto_ganancias = (monto * ganancias) / 100
-
-    return impuesto_ganancias
-
 # Funcion para imprimir matriz - (A cambiar para que quede mejor visualmente)
+# Ingresa una matriz y la imprime en pantalla
 def imprimirMatriz(matriz):
     print("Matriz de Alicuotas:")
     print("-" * 30)
@@ -108,42 +333,43 @@ def imprimirMatriz(matriz):
     for fila in matriz:
         print("{:<10.1f} {:<10.1f} {:<10.1f}".format(fila[0], fila[1], fila[2]))
 
-# Ingreso de datos del usuario
-def obtener_entrada():
-    
-    monto = int(input("Ingrese el monto: "))
-    
-    while monto < 1:
-        monto = int(input("Ingrese un monto correcto: "))
-        
-    condicion_fiscal_iva = int(input("Cual es su condicion fiscal frente al IVA? \n 1. Exento \n 2. Responsable inscripto \n 3. Consumidor final"))
-    
-    while condicion_fiscal_iva < 1 and condicion_fiscal_iva > 3:
-        condicion_fiscal_iva = int(input("Ingrese una condicion fiscal valida: \n 1. Exento \n 2. Responsable inscripto \n 3. Consumidor final"))
+#Funcion para imprimir el resumen de una transaccion.
+#Ingresa un diccionario con los datos de la transacción y una lista con los impuestos aplicados
+def imprimir_resumen(datos_transaccion, impuestos_aplicados):
+    # Extraemos los datos de la transacción
+    monto = datos_transaccion['monto']
+    condicion_iva = datos_transaccion['condicion_fiscal_iva']
+    condicion_iibb = datos_transaccion['condicion_fiscal_iibb']
+    provincia = datos_transaccion['provincia']
 
-    if condicion_fiscal_iva == 1 :
-        condicion_fiscal_iva = "Exento"
-    elif condicion_fiscal_iva == 2 :
-        condicion_fiscal_iva = "Responsable inscripto"
-    else:
-        condicion_fiscal_iva = "Consumidor final"
-
-
+    # Título principal
+    print("==== Resumen de la Transacción ====\n")
     
-    condicion_fiscal_iibb = int(input("Cual es su condicion fiscal frente a Ingresos Brutos? \n 1. Local \n 2. Multilateral \n 3. No inscripto"))
+    # Detalles de la transacción
+    print(f"Provincia: {provincia}")
+    print(f"Monto: ${monto:.2f}")
+    print(f"Condición Fiscal IVA: {condicion_iva}")
+    print(f"Condición Fiscal IIBB: {condicion_iibb}\n")
+    
+    # Título para los impuestos
+    print("==== Impuestos Aplicados ====\n")
 
-    while condicion_fiscal_iibb < 1 and condicion_fiscal_iibb > 3:
-        condicion_fiscal_iibb = int(input("Ingrese una condicion fiscal valida: \n 1. Local \n 2. Multilateral \n 3. No inscripto"))
-        
-    if condicion_fiscal_iibb == 1 :
-        condicion_fiscal_iibb = "Local"
-    elif condicion_fiscal_iibb == 2 :
-        condicion_fiscal_iibb = "Multilateral"
-    else:
-        condicion_fiscal_iibb = "No inscripto"
-        
+    # Detalles de los impuestos aplicados
+    for impuesto in impuestos_aplicados:
+        titulo = impuesto['titulo']
+        tasa = impuesto['tasa']
+        monto_impuesto = impuesto['impuesto']
+        print(f"{titulo}:")
+        print(f"  - Tasa: {tasa}%")
+        print(f"  - Monto del impuesto: ${monto_impuesto:.2f}\n")
+   
 
 ## PROGRAMA PRINCIPAL
 datos_transaccion = obtener_entrada()
 impuestos_aplicados = calcular_impuestos(datos_transaccion)
+# print(datos_transaccion)
+# print(impuestos_aplicados)
 imprimir_resumen(datos_transaccion, impuestos_aplicados)
+
+ 
+
