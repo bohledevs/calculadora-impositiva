@@ -48,5 +48,5 @@ provincias_argentina = (
     "Tierra del Fuego",
     "Tucumán"
 )
-
+#Imprime la variable provincias_argentina 
 print(provincias_argentina)
