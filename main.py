@@ -2,38 +2,50 @@
 import json
 import random
 
-def crearMatrizAlicuotas():
-
-    matriz = []
-    filas = 23
-    columnas = 3
-
-    for i in range (filas):
-        fila = []
-        for j in range(columnas):
-            # Generar valores de alicoutas random y ordenarlos de mayor a menos
-            valores = [generarValoresAlicoutas() for _ in range(3)]
-            valores.sort()
-
-            #  Agregar los valores a la fila
-            fila = [valores[2], valores[1], valores[0]] 
-
-        matriz.append(fila)
-        
-    
-    imprimirMatriz(matriz)
-
 # Llaves de la entrada
 LLAVE_CF_IVA = "condicion_fiscal_iva"
 LLAVE_CF_IIBB = "condicion_fiscal_iibb"
 LLAVE_MONTO = "monto"
 LLAVE_PROVINCIA = "provincia"
 
-
 # Llaves de la salida
 LLAVE_TASA = "tasa"
 LLAVE_IMPUESTO = "impuesto"
 LLAVE_TITULO = "titulo"
+
+# Tupla de provincias argentinas
+provincias_argentina = (
+    "Buenos Aires",
+    "Catamarca",
+    "Chaco",
+    "Chubut",
+    "Córdoba",
+    "Corrientes",
+    "Entre Ríos",
+    "Formosa",
+    "Jujuy",
+    "La Pampa",
+    "La Rioja",
+    "Mendoza",
+    "Misiones",
+    "Neuquén",
+    "Río Negro",
+    "Salta",
+    "San Juan",
+    "San Luis",
+    "Santa Cruz",
+    "Santa Fe",
+    "Santiago del Estero",
+    "Tierra del Fuego",
+    "Tucumán"
+)
+
+
+condiciones_iibb = (
+    "Local",
+    "Multilateral",
+    "No inscripto"
+)
 
 
 # El usuario ingresa los datos requeridos en la pantalla.
@@ -94,96 +106,6 @@ def imprimir_tupla(tupla):
     for indice, elemento in enumerate(tupla):
         resultado += f"{indice + 1}. {elemento}\n"
     return resultado
-
-
-
-# Tupla de provincias argentinas
-provincias_argentina = (
-    "Buenos Aires",
-    "Catamarca",
-    "Chaco",
-    "Chubut",
-    "Córdoba",
-    "Corrientes",
-    "Entre Ríos",
-    "Formosa",
-    "Jujuy",
-    "La Pampa",
-    "La Rioja",
-    "Mendoza",
-    "Misiones",
-    "Neuquén",
-    "Río Negro",
-    "Salta",
-    "San Juan",
-    "San Luis",
-    "Santa Cruz",
-    "Santa Fe",
-    "Santiago del Estero",
-    "Tierra del Fuego",
-    "Tucumán"
-)
-
-
-condiciones_iibb = (
-    "Local",
-    "Multilateral",
-    "No inscripto"
-)
-
-# Función para imprimir el diccionario completo en pantalla
-#Ingresa un diccionario que representa una jurisdiccion.
-def imprimir_jurisdicciones_simplificado(jurisdiccion, nivel=0):
-    print(f"Jurisdicción: {jurisdiccion['jurisdiccion']}")
-    print(f"ID: {jurisdiccion['id']}")
-    print(f"Impuestos: {', '.join(jurisdiccion['impuestos'])}")
-    if jurisdiccion['sub_jurisdicciones']:
-        print("Sub-jurisdicciones:")
-        for sub in jurisdiccion['sub_jurisdicciones']:
-            imprimir_jurisdicciones_simplificado(sub, nivel + 1)
-
-#funcion para obtener los impuestos de una provincia especifica.
-#Ingresa el diccionario de jurisdicciones y retorna una lista de impuestos aplicados a la provincia encontrada.
-def obtener_impuestos_provincia(jurisdicciones, provincia):
-    data = jurisdicciones.get("sub_jurisdicciones")
-
-    for i in range(len(data)):
-
-        if data[i].get("jurisdiccion") == provincia:
-            impuestos = data[i].get("impuestos")
-            return impuestos
-
-#funcion para imprimir el resumen de una transaccion.
-#Ingresa un diccionario con los datos de la transacción y una lista con los impuestos aplicados
-def imprimir_resumen(transaccion, saldo):
-    fecha = transaccion.get('fecha', 'Sin Fecha')
-    descripcion = transaccion.get('descripcion', 'Sin Descripcion')
-    monto = transaccion.get('monto', 0.0)
-    cliente = transaccion.get('cliente', 'Sin Cliente')
-    IVA = transaccion.get('IVA', 0.0)
-    ganacias = transaccion.get('ganancias', 0.0)
-    iibb = transaccion.get('iibb', 0.0)
-
-    #Resumen de la Transacción
-    print(f"Resumen de la Transacción:")
-    print(f'Fecha: {fecha}')
-    print(f'Descripcion: {descripcion}')
-    print(f'Cliente: {cliente}')
-    print(f"Monto total de la transacción: {monto}")
-
-    #Detalles Impositivos
-    print("\nDetalles Impositivos:")
-    print(f"IVA: {IVA}")
-    print(f"Ganancias: {ganacias}")
-    print(f"IIBB: {iibb}")
-    
-    #Total de impuestos
-    total_impuestos = IVA + ganacias + iibb
-    print(f"Total de Impuestos: {total_impuestos}")
-
-    #Monto Final
-    monto_final = monto + total_impuestos
-    print(f"Monto Final: {monto_final}")
 
 
 # Recibe los datos del usuario y retorna los impuestos aplicados
@@ -290,17 +212,6 @@ def generarValoresAlicoutas():
     alicouta = round(random.uniform(0.2, 7), 1)
 
     return alicouta
-
-# Funcion para imprimir matriz - (A cambiar para que quede mejor visualmente)
-# Ingresa una matriz y la imprime en pantalla
-def imprimirMatriz(matriz):
-    print("Matriz de Alicuotas:")
-    print("-" * 30)
-    print("{:<10} {:<10} {:<10}".format("No inscripto", "Local", "Multilateral"))
-    print("-" * 30)
-    
-    for fila in matriz:
-        print("{:<10.1f} {:<10.1f} {:<10.1f}".format(fila[0], fila[1], fila[2]))
 
 #Funcion para imprimir el resumen de una transaccion.
 #Ingresa un diccionario con los datos de la transacción y una lista con los impuestos aplicados
