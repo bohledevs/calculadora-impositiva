@@ -75,7 +75,19 @@ def obtener_entrada():
     else:
         condicion_fiscal_iibb = "No inscripto"
         
+    datos_transaccion[LLAVE_CF_IIBB] = condicion_fiscal_iibb
     
+    indice_provincia = int(input(f"Ingrese el número correspondiente a su provincia: \n {imprimir_tupla(provincias_argentina)} \n Respuesta: "))
+    while indice_provincia < 1 or indice_provincia > 23:
+        indice_provincia = int(input(f"Ingrese el número correspondiente a su provincia válido: \n {imprimir_tupla(provincias_argentina)} \n Respuesta: "))
+    provincia = provincias_argentina[indice_provincia-1]
+
+    datos_transaccion[LLAVE_PROVINCIA] = provincia
+
+    return datos_transaccion
+
+    # Aquí es donde falta devolver el diccionario
+    return datos_transaccion
         
 
 #funcion que pida al usuario los datos y los retorne al diccionario
@@ -145,8 +157,6 @@ provincias_argentina = (
     "Tucumán"
 )
 
-
-print(provincias_argentina)
 
 condiciones_iibb = (
     "Local",
