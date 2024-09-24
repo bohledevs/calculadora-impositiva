@@ -119,6 +119,7 @@ def obtener_datos_usuario():
 
 
 # Imprime tuplas, numeradas por su indice
+# Se ingresa una tupla y se imprime en pantalla
 def imprimir_tupla(tupla):
     resultado = ""
     for indice, elemento in enumerate(tupla):
@@ -162,6 +163,7 @@ condiciones_iibb = (
 )
 
 # Función para imprimir el diccionario completo en pantalla
+#Ingresa un diccionario que representa una jurisdiccion.
 def imprimir_jurisdicciones_simplificado(jurisdiccion, nivel=0):
     print(f"Jurisdicción: {jurisdiccion['jurisdiccion']}")
     print(f"ID: {jurisdiccion['id']}")
@@ -171,7 +173,8 @@ def imprimir_jurisdicciones_simplificado(jurisdiccion, nivel=0):
         for sub in jurisdiccion['sub_jurisdicciones']:
             imprimir_jurisdicciones_simplificado(sub, nivel + 1)
 
-#funcion buscar_impuesto
+#funcion para obtener los impuestos de una provincia especifica.
+#Ingresa el diccionario de jurisdicciones y retorna una lista de impuestos aplicados a la provincia encontrada.
 def obtener_impuestos_provincia(jurisdicciones, provincia):
     data = jurisdicciones.get("sub_jurisdicciones")
 
@@ -181,7 +184,8 @@ def obtener_impuestos_provincia(jurisdicciones, provincia):
             impuestos = data[i].get("impuestos")
             return impuestos
 
-#funcion imprirmir_resumen
+#funcion para imprimir el resumen de una transaccion.
+#Ingresa un diccionario con los datos de la transacción y una lista con los impuestos aplicados
 def imprimir_resumen(transaccion, saldo):
     fecha = transaccion.get('fecha', 'Sin Fecha')
     descripcion = transaccion.get('descripcion', 'Sin Descripcion')
@@ -214,16 +218,19 @@ def imprimir_resumen(transaccion, saldo):
 
 
 # Recibe los datos del usuario y retorna los impuestos aplicados
+# Ingresa un diccionario con los datos de la transacción y retorna una lista con los impuestos aplicados
 def calcular_impuestos(datos_transaccion):
     return calcular_nacionales(datos_transaccion) + calcular_provinciales(datos_transaccion)
 
-
+#Calcula los impuestos nacionales
+#Ingresa un diccionario con los datos de la transacción y retorna una lista con los impuestos nacionales
 def calcular_nacionales(datos_transaccion):
     condicion_fiscal_iva = datos_transaccion.get(LLAVE_CF_IVA)
     monto = datos_transaccion.get(LLAVE_MONTO)
     return [calcular_iva(monto, condicion_fiscal_iva), calcular_ganancias(monto, condicion_fiscal_iva)]
 
 # Funcion para calcular IVA
+#Ingresa el monto de la transacción y la condición fiscal del cliente y retorna un diccionario con el impuesto aplicado
 def calcular_iva(monto, cf):
     
     resumen = {}
@@ -242,6 +249,7 @@ def calcular_iva(monto, cf):
     return resumen
 
 # Funcion para calcular IVA
+#Ingresa el monto de la transacción y la condición fiscal del cliente y retorna un diccionario con el impuesto aplicado
 def calcular_ganancias(monto, cf):
     
     resumen = {}
@@ -259,14 +267,16 @@ def calcular_ganancias(monto, cf):
 
     return resumen
 
-
+#Calcula los impuestos provinciales
+#Ingresa un diccionario con los datos de la transacción y retorna una lista con los impuestos provinciales
 def calcular_provinciales(datos_transaccion):
     condicion_fiscal_iibb = datos_transaccion.get(LLAVE_CF_IIBB)
     monto = datos_transaccion.get(LLAVE_MONTO)
     provincia = datos_transaccion.get(LLAVE_PROVINCIA)
     return [calcular_iibb(monto, condicion_fiscal_iibb, provincia)]
 
-
+#Calcula el impuesto de Ingresos Brutos
+#Ingresa el monto de la transaccion, la condicion fiscal del cliente y la provincia y retorna un diccionario con el impuesto aplicado
 def calcular_iibb(monto, cf, provincia):
 
     resumen = {}
@@ -284,7 +294,8 @@ def calcular_iibb(monto, cf, provincia):
 
     return resumen
 
-
+#Genera un valor de alícuota ficticio.
+#Retorna un valor de alícuota entre 0.2 y 7.0
 def crearMatrizAlicuotas():
 
     matriz = []
@@ -312,6 +323,7 @@ def generarValoresAlicoutas():
     return alicouta
 
 # Funcion para imprimir matriz - (A cambiar para que quede mejor visualmente)
+# Ingresa una matriz y la imprime en pantalla
 def imprimirMatriz(matriz):
     print("Matriz de Alicuotas:")
     print("-" * 30)
@@ -321,7 +333,8 @@ def imprimirMatriz(matriz):
     for fila in matriz:
         print("{:<10.1f} {:<10.1f} {:<10.1f}".format(fila[0], fila[1], fila[2]))
 
-
+#Funcion para imprimir el resumen de una transaccion.
+#Ingresa un diccionario con los datos de la transacción y una lista con los impuestos aplicados
 def imprimir_resumen(datos_transaccion, impuestos_aplicados):
     # Extraemos los datos de la transacción
     monto = datos_transaccion['monto']
