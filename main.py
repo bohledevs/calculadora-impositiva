@@ -85,9 +85,6 @@ def obtener_entrada():
     datos_transaccion[LLAVE_PROVINCIA] = provincia
 
     return datos_transaccion
-
-    # Aquí es donde falta devolver el diccionario
-    return datos_transaccion
         
 
 #funcion que pida al usuario los datos y los retorne al diccionario
