@@ -9,6 +9,9 @@ with open("jurisdicciones_argentina.json", "r") as file:
 file.close()
 
 # Función para imprimir el diccionario completo en pantalla, mostrando las jurisdicciones, IDs e impuestos
+# Qué hace?: Esta función imprime la información simplificada de una jurisdicción, mostrando su nombre, ID e impuestos aplicables. Si tiene sub-jurisdicciones, también las imprime recursivamente.
+# Qué ingresa?: Ingresa un diccionario que representa una jurisdicción, y opcionalmente un nivel de profundidad (nivel), utilizado para estructurar la impresión de sub-jurisdicciones.
+# Qué sale?: No devuelve ningún valor, simplemente imprime la información.
 def imprimir_jurisdicciones_simplificado(jurisdiccion, nivel=0):
     print(f"Jurisdicción: {jurisdiccion['jurisdiccion']}")  # Imprime el nombre de la jurisdicción
     print(f"ID: {jurisdiccion['id']}")  # Imprime el ID de la jurisdicción
@@ -19,6 +22,9 @@ def imprimir_jurisdicciones_simplificado(jurisdiccion, nivel=0):
             imprimir_jurisdicciones_simplificado(sub, nivel + 1)
 
 # Función para imprimir el resumen de una transacción y sus impuestos
+# Qué hace?: Esta función imprime un resumen detallado de una transacción, mostrando la fecha, descripción, cliente, monto, y los impuestos aplicados (IVA, Ganancias, IIBB). También calcula y muestra el total de impuestos y el monto final de la transacción.
+# Qué ingresa?: Ingresa un diccionario que representa la transacción (con claves como 'fecha', 'descripcion', 'monto', etc.) y un saldo que no se utiliza en la función actual.
+# Qué sale?: No devuelve ningún valor, simplemente imprime el resumen de la transacción.
 def imprimir_resumen(transaccion, saldo):
     fecha = transaccion.get('fecha', 'Sin Fecha')  # Obtiene la fecha de la transacción, o un valor por defecto
     descripcion = transaccion.get('descripcion', 'Sin Descripcion')  # Obtiene la descripción de la transacción
@@ -50,6 +56,9 @@ def imprimir_resumen(transaccion, saldo):
     print(f"Monto Final: {monto_final}")
 
 # Función para obtener los impuestos de una provincia específica
+# Qué hace?: Esta función busca dentro de las sub-jurisdicciones de Argentina y devuelve los impuestos aplicables a una provincia específica.
+# Qué ingresa?: Ingresa el diccionario de jurisdicciones (de Argentina) y el nombre de la provincia como una cadena de texto.
+# Qué sale?: Retorna una lista de impuestos aplicables a la provincia encontrada. Si la provincia no existe, retorna None.
 def obtener_impuestos_provincia(jurisdicciones, provincia):
     data = jurisdicciones.get("sub_jurisdicciones")  # Obtiene las sub-jurisdicciones del diccionario principal
 
