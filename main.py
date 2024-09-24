@@ -28,10 +28,10 @@ def obtener_entrada():
         
     datos_transaccion[LLAVE_MONTO] = monto 
 
-    condicion_fiscal_iva = int(input("Cual es su condicion fiscal frente al IVA? \n 1. Exento \n 2. Responsable inscripto \n 3. Consumidor final"))
+    condicion_fiscal_iva = int(input("Cual es su condicion fiscal frente al IVA? \n 1. Exento \n 2. Responsable inscripto \n 3. Consumidor final: \n Respuesta: "))
     
-    while condicion_fiscal_iva < 1 and condicion_fiscal_iva > 3:
-        condicion_fiscal_iva = int(input("Ingrese una condicion fiscal valida: \n 1. Exento \n 2. Responsable inscripto \n 3. Consumidor final"))
+    while condicion_fiscal_iva < 1 or condicion_fiscal_iva > 3:
+        condicion_fiscal_iva = int(input("Ingrese una condicion fiscal valida: \n 1. Exento \n 2. Responsable inscripto \n 3. Consumidor final \n Respuesta: "))
 
     if condicion_fiscal_iva == 1 :
         condicion_fiscal_iva = "Exento"
@@ -42,10 +42,10 @@ def obtener_entrada():
     
     datos_transaccion[LLAVE_CF_IVA] = condicion_fiscal_iva
 
-    condicion_fiscal_iibb = int(input("Cual es su condicion fiscal frente a Ingresos Brutos? \n 1. Local \n 2. Multilateral \n 3. No inscripto"))
+    condicion_fiscal_iibb = int(input("Cual es su condicion fiscal frente a Ingresos Brutos? \n 1. Local \n 2. Multilateral \n 3. No inscripto \n Respuesta: "))
 
-    while condicion_fiscal_iibb < 1 and condicion_fiscal_iibb > 3:
-        condicion_fiscal_iibb = int(input("Ingrese una condicion fiscal valida: \n 1. Local \n 2. Multilateral \n 3. No inscripto"))
+    while condicion_fiscal_iibb < 1 or condicion_fiscal_iibb > 3:
+        condicion_fiscal_iibb = int(input("Ingrese una condicion fiscal valida: \n 1. Local \n 2. Multilateral \n 3. No inscripto \n Respuesta: "))
         
     if condicion_fiscal_iibb == 1 :
         condicion_fiscal_iibb = "Local"
@@ -56,18 +56,23 @@ def obtener_entrada():
 
     datos_transaccion[LLAVE_CF_IIBB] = condicion_fiscal_iibb
     
-    indice_provincia = int(input(f"Ingrese el número correspondiente a su provincia: \n {imprimir_tupla(provincias_argentina)}"))
+    indice_provincia = int(input(f"Ingrese el número correspondiente a su provincia: \n{imprimir_tupla(provincias_argentina)} Nro. de Provincia \n Respuesta: "))
+    while indice_provincia < 1 or indice_provincia > 23:
+       indice_provincia = int(input(f"Ingrese un número válido: \n{imprimir_tupla(provincias_argentina)} Nro. de Provincia \n Respuesta: "))
     provincia = provincias_argentina[indice_provincia-1]
 
     datos_transaccion[LLAVE_PROVINCIA] = provincia
-
+    
     return datos_transaccion
 
 
 # Imprime tuplas, numeradas por su indice
 def imprimir_tupla(tupla):
+    resultado = ""
     for indice, elemento in enumerate(tupla):
-        print(f"{indice + 1}. {elemento}")
+        resultado += f"{indice + 1}. {elemento}\n"
+    return resultado
+
 
 
 # Tupla de provincias argentinas
@@ -263,79 +268,41 @@ def imprimirMatriz(matriz):
     for fila in matriz:
         print("{:<10.1f} {:<10.1f} {:<10.1f}".format(fila[0], fila[1], fila[2]))
 
-        
+
+def imprimir_resumen(datos_transaccion, impuestos_aplicados):
+    # Extraemos los datos de la transacción
+    monto = datos_transaccion['monto']
+    condicion_iva = datos_transaccion['condicion_fiscal_iva']
+    condicion_iibb = datos_transaccion['condicion_fiscal_iibb']
+    provincia = datos_transaccion['provincia']
+
+    # Título principal
+    print("==== Resumen de la Transacción ====\n")
     
-    provincia = int(input("Seleccione una provincia: \n"
-      "1. Buenos Aires\n"
-      "2. Catamarca\n"
-      "3. Chaco\n"
-      "4. Chubut\n"
-      "5. Córdoba\n"
-      "6. Corrientes\n"
-      "7. Entre Ríos\n"
-      "8. Formosa\n"
-      "9. Jujuy\n"
-      "10. La Pampa\n"
-      "11. La Rioja\n"
-      "12. Mendoza\n"
-      "13. Misiones\n"
-      "14. Neuquén\n"
-      "15. Río Negro\n"
-      "16. Salta\n"
-      "17. San Juan\n"
-      "18. San Luis\n"
-      "19. Santa Cruz\n"
-      "20. Santa Fe\n"
-      "21. Santiago del Estero\n"
-      "22. Tierra del Fuego\n"
-      "23. Tucumán. \n"))
-
+    # Detalles de la transacción
+    print(f"Provincia: {provincia}")
+    print(f"Monto: ${monto:.2f}")
+    print(f"Condición Fiscal IVA: {condicion_iva}")
+    print(f"Condición Fiscal IIBB: {condicion_iibb}\n")
     
-    while provincia < 1 or provincia > 23:
-        provincia = int(input("Seleccione un número válido de provincia: \n"
-                      "1. Buenos Aires\n"
-                      "2. Catamarca\n"
-                      "3. Chaco\n"
-                      "4. Chubut\n"
-                      "5. Córdoba\n"
-                      "6. Corrientes\n"
-                      "7. Entre Ríos\n"
-                      "8. Formosa\n"
-                      "9. Jujuy\n"
-                      "10. La Pampa\n"
-                      "11. La Rioja\n"
-                      "12. Mendoza\n"
-                      "13. Misiones\n"
-                      "14. Neuquén\n"
-                      "15. Río Negro\n"
-                      "16. Salta\n"
-                      "17. San Juan\n"
-                      "18. San Luis\n"
-                      "19. Santa Cruz\n"
-                      "20. Santa Fe\n"
-                      "21. Santiago del Estero\n"
-                      "22. Tierra del Fuego\n"
-                      "23. Tucumán. \n"))
-        
-    provincia_seleccionada = provincias_argentina[provincia]
+    # Título para los impuestos
+    print("==== Impuestos Aplicados ====\n")
 
-    datos = {
-        "monto": monto,
-        "condicion_iva": condicion_fiscal_iva,
-        "condicion_ibb": condicion_fiscal_iibb,
-        "provincia": provincia_seleccionada
-    }
-
-    print(datos)
-    
-    return datos
-
-
-        
+    # Detalles de los impuestos aplicados
+    for impuesto in impuestos_aplicados:
+        titulo = impuesto['titulo']
+        tasa = impuesto['tasa']
+        monto_impuesto = impuesto['impuesto']
+        print(f"{titulo}:")
+        print(f"  - Tasa: {tasa}%")
+        print(f"  - Monto del impuesto: ${monto_impuesto:.2f}\n")
+   
 
 ## PROGRAMA PRINCIPAL
 datos_transaccion = obtener_entrada()
 impuestos_aplicados = calcular_impuestos(datos_transaccion)
-print(datos_transaccion)
-print(impuestos_aplicados)
-#imprimir_resumen(datos_transaccion, impuestos_aplicados)
+# print(datos_transaccion)
+# print(impuestos_aplicados)
+imprimir_resumen(datos_transaccion, impuestos_aplicados)
+
+ 
