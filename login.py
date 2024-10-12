@@ -30,4 +30,3 @@ def iniciar_sesion():
             print("\t║  Usuario no encontrado.     ║")
             print("\t╚═════════════════════════════╝\n")
 
-iniciar_sesion()

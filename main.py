@@ -1,6 +1,7 @@
 
 import json
 import random
+import login
 
 # Llaves de la entrada
 LLAVE_CF_IVA = "condicion_fiscal_iva"
@@ -250,6 +251,7 @@ def imprimir_resumen(datos_transaccion, impuestos_aplicados):
    
 
 ## PROGRAMA PRINCIPAL
+login.iniciar_sesion()
 datos_transaccion = obtener_entrada()
 impuestos_aplicados = calcular_impuestos(datos_transaccion)
 imprimir_resumen(datos_transaccion, impuestos_aplicados)
