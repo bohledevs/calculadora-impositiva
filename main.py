@@ -1,6 +1,7 @@
 
 import json
 import random
+import copy
 import login
 
 # Llaves de la entrada
@@ -13,6 +14,9 @@ LLAVE_PROVINCIA = "provincia"
 LLAVE_TASA = "tasa"
 LLAVE_IMPUESTO = "impuesto"
 LLAVE_TITULO = "titulo"
+
+# Llaves del resumen
+IMPUESTOS_APLICADOS = "impuestos_aplicados"
 
 # Tupla de provincias argentinas
 provincias_argentina = (
@@ -217,16 +221,21 @@ def generarValoresAlicoutas():
 
     alicouta = round(random.uniform(0.2, 7), 1)
 
-    return alicouta
+    return alicouta   
+
+# Amalgama los datos de la transaccion en una sola salida
+def obtener_resumen(datos_transaccion, impuestos_aplicados):
+    resumen = datos_transaccion.copy()
+    resumen[IMPUESTOS_APLICADOS] = impuestos_aplicados
+    return resumen
 
 #Funcion para imprimir el resumen de una transaccion.
-#Ingresa un diccionario con los datos de la transacción y una lista con los impuestos aplicados
-def imprimir_resumen(datos_transaccion, impuestos_aplicados):
+def imprimir_resumen(resumen):
     # Extraemos los datos de la transacción
-    monto = datos_transaccion['monto']
-    condicion_iva = datos_transaccion['condicion_fiscal_iva']
-    condicion_iibb = datos_transaccion['condicion_fiscal_iibb']
-    provincia = datos_transaccion['provincia']
+    monto = resumen['monto']
+    condicion_iva = resumen['condicion_fiscal_iva']
+    condicion_iibb = resumen['condicion_fiscal_iibb']
+    provincia = resumen['provincia']
 
     # Título principal
     print("==== Resumen de la Transacción ====\n")
@@ -241,20 +250,17 @@ def imprimir_resumen(datos_transaccion, impuestos_aplicados):
     print("==== Impuestos Aplicados ====\n")
 
     # Detalles de los impuestos aplicados
-    for impuesto in impuestos_aplicados:
+    for impuesto in resumen[IMPUESTOS_APLICADOS]:
         titulo = impuesto['titulo']
         tasa = impuesto['tasa']
         monto_impuesto = impuesto['impuesto']
         print(f"{titulo}:")
         print(f"  - Tasa: {tasa}%")
         print(f"  - Monto del impuesto: ${monto_impuesto:.2f}\n")
-   
 
 ## PROGRAMA PRINCIPAL
 login.iniciar_sesion()
 datos_transaccion = obtener_entrada()
 impuestos_aplicados = calcular_impuestos(datos_transaccion)
-imprimir_resumen(datos_transaccion, impuestos_aplicados)
-
- 
-
+resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
+imprimir_resumen(resumen)
