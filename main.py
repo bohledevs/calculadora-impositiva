@@ -2,6 +2,7 @@
 import json
 import random
 import copy
+import login
 
 # Llaves de la entrada
 LLAVE_CF_IVA = "condicion_fiscal_iva"
@@ -44,6 +45,11 @@ provincias_argentina = (
     "Tucumán"
 )
 
+condiciones_iva = (
+    "Exento",
+    "Responsable Inscripto",
+    "Consumidor Final"
+)
 
 condiciones_iibb = (
     "Local",
@@ -65,31 +71,31 @@ def obtener_entrada():
         
     datos_transaccion[LLAVE_MONTO] = monto 
 
-    condicion_fiscal_iva = int(input("Cual es su condicion fiscal frente al IVA? \n 1. Exento \n 2. Responsable inscripto \n 3. Consumidor final: \n Respuesta: "))
+    condicion_fiscal_iva = int(input(f"Cual es su condicion fiscal frente al IVA? \n{imprimir_tupla(condiciones_iva)}\n Respuesta: "))
     
     while condicion_fiscal_iva < 1 or condicion_fiscal_iva > 3:
-        condicion_fiscal_iva = int(input("Ingrese una condicion fiscal valida: \n 1. Exento \n 2. Responsable inscripto \n 3. Consumidor final \n Respuesta: "))
+        condicion_fiscal_iva = int(input(f"Ingrese una condicion fiscal valida: \n{imprimir_tupla(condiciones_iva)}\n Respuesta: "))
 
     if condicion_fiscal_iva == 1 :
-        condicion_fiscal_iva = "Exento"
+        condicion_fiscal_iva = condiciones_iva[0]
     elif condicion_fiscal_iva == 2 :
-        condicion_fiscal_iva = "Responsable Inscripto"
+        condicion_fiscal_iva = condiciones_iva[1]
     else:
-        condicion_fiscal_iva = "Consumidor Final"
+        condicion_fiscal_iva = condiciones_iva[2]
     
     datos_transaccion[LLAVE_CF_IVA] = condicion_fiscal_iva
 
-    condicion_fiscal_iibb = int(input("Cual es su condicion fiscal frente a Ingresos Brutos? \n 1. Local \n 2. Multilateral \n 3. No inscripto \n Respuesta: "))
+    condicion_fiscal_iibb = int(input(f"Cual es su condicion fiscal frente a Ingresos Brutos? \n{imprimir_tupla(condiciones_iibb)} \n Respuesta: "))
 
     while condicion_fiscal_iibb < 1 or condicion_fiscal_iibb > 3:
-        condicion_fiscal_iibb = int(input("Ingrese una condicion fiscal valida: \n 1. Local \n 2. Multilateral \n 3. No inscripto \n Respuesta: "))
+        condicion_fiscal_iibb = int(input(f"Ingrese una condicion fiscal valida: \n {imprimir_tupla(condiciones_iibb)} \n Respuesta: "))
         
     if condicion_fiscal_iibb == 1 :
-        condicion_fiscal_iibb = "Local"
+        condicion_fiscal_iibb = condiciones_iibb[0]
     elif condicion_fiscal_iibb == 2 :
-        condicion_fiscal_iibb = "Multilateral"
+        condicion_fiscal_iibb = condiciones_iibb[1]
     else:
-        condicion_fiscal_iibb = "No inscripto"
+        condicion_fiscal_iibb = condiciones_iibb[2]
         
     datos_transaccion[LLAVE_CF_IIBB] = condicion_fiscal_iibb
     
@@ -131,9 +137,9 @@ def calcular_iva(monto, cf):
     resumen = {}
 
     tasa = 0
-    if (cf == "Responsable Inscripto"):
+    if (cf == condiciones_iva[1]):
         tasa = 10.5
-    elif (cf == "Consumidor Final"):
+    elif (cf == condiciones_iva[2]):
         tasa = 21.0
     resumen[LLAVE_TASA] = tasa
 
@@ -151,9 +157,9 @@ def calcular_ganancias(monto, cf):
     resumen[LLAVE_TITULO] = "Ganancias"
 
     tasa = 0
-    if (cf == "Responsable Inscripto"):
+    if (cf == condiciones_iva[1]):
         tasa = 0.5
-    elif (cf == "Consumidor Final"):
+    elif (cf == condiciones_iva[2]):
         tasa = 2.0
     resumen[LLAVE_TASA] = tasa
 
@@ -253,6 +259,7 @@ def imprimir_resumen(resumen):
         print(f"  - Monto del impuesto: ${monto_impuesto:.2f}\n")
 
 ## PROGRAMA PRINCIPAL
+login.iniciar_sesion()
 datos_transaccion = obtener_entrada()
 impuestos_aplicados = calcular_impuestos(datos_transaccion)
 resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
