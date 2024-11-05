@@ -1,0 +1,33 @@
+@startuml
+
+start
+
+:Ingresar datos 
+-monto 
+-condicion fiscal (cf);
+
+if (cf == 'IVA Exento'?) then (yes)
+  :iva = 0%
+  ganancias = 0%;
+else (no)
+  if (cf == 'Responsable Inscripto'?) then (yes)
+   :iva = 10.5%
+   ganancias = 0.5%;
+  else (no)
+   if (cf == 'Consumidor Final'?) then (yes)
+    :iva = 21.0%
+    ganancias = 2%;
+   else (no)
+    :Error, condicion fiscal\nno existente;
+   endif
+  endif
+endif 
+
+:impuesto_iva = monto*iva/100
+impuesto_ganancias = monto*ganancias/100;
+
+:mostrar_montos(impuesto_iva, impuesto_ganancias);
+
+stop
+
+@enduml

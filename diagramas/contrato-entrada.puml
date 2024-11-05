@@ -1,0 +1,8 @@
+@startjson
+{
+   "monto":12000,
+   "condicion_fiscal_iva":["Exento", "Responsable Inscripto", "Consumidor Final"],
+   "condicion_fiscal_iibb": ["Local", "Multilateral", "No Inscripto"],
+   "provincia del vendedor": ["Buenos Aires", "Corrientes", "etc"]
+}
+@endjson
