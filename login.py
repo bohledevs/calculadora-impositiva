@@ -1,6 +1,4 @@
 import csv
-import re 
-import os
 
 #Nombre del archivo csv
 archivo_csv = "usuario.csv"
@@ -53,6 +51,7 @@ def registrar():
     
     pregunta = input("Ingrese su pregunta de recuperación: ")
     respuesta = input("Ingrese su respuesta de recuperación: ")
+    domicilio = input("Ingrese su domicilio: ")
 
     #Leer el archivo para determinar el proximo ID
     with open(archivo_csv, 'r', encoding='utf-8') as archivo:
@@ -65,7 +64,7 @@ def registrar():
 
     #Escribir los datos del nuevo usuario en el archivo
     with open(archivo_csv, 'a', encoding='utf-8') as archivo:
-         archivo.write(f'{nuevo_id},{nombre},{contrasena},{pregunta},{respuesta}\n')
+         archivo.write(f'{nuevo_id},{nombre},{contrasena},{pregunta},{respuesta},{domicilio}\n')
 
     print("Usuario registrado exitosamente.")
 
@@ -81,8 +80,16 @@ def login():
             datos = linea.strip().split(',')
             if datos[1] == nombre and datos[2] == contrasena:
                 print(f"Bienvenido, {nombre}!")
-                return
+                return {
+                    "id_usuario": datos[0],
+                    "nombre_usuario": datos[1],
+                    "contraseña": datos[2],
+                    "preg_recup": datos[3],
+                    "resp_recup": datos[4],
+                    "domicilio": datos[5]
+                }
     print("Nombre de usuario o contraseña incorrectos.")
+    return None
 
 #Funcion para recuperar contraseña
 def recuperar_contrasena():
@@ -129,39 +136,3 @@ def menu():
 
 #Ejecutar el programa
 menu()
-
-
-
-
-# usuarios = {
-#     "usuario1": "contraseña1",
-#     "usuario2": "contraseña2"
-# }
-
-# def iniciar_sesion():
-#     print("\n\t╔═════════════════════════════╗")
-#     print("\t║       Iniciar Sesión        ║")
-#     print("\t╚═════════════════════════════╝\n")
-
-#     usuarioLogeado = False
-
-#     while usuarioLogeado == False:
-
-#         usuario = input("Ingrese su nombre de usuario: ")
-#         contrasena = input("Ingrese su contraseña: ")
-
-#         if usuario in usuarios:
-#             if usuarios[usuario] == contrasena:
-#                 print("\n\t╔═════════════════════════════╗")
-#                 print("\t║  Inicio de sesión exitoso!  ║")
-#                 print("\t╚═════════════════════════════╝\n")
-#                 usuarioLogeado = True
-#             else:
-#                 print("\n\t╔═════════════════════════════╗")
-#                 print("\t║   Contraseña incorrecta.    ║")
-#                 print("\t╚═════════════════════════════╝\n")
-#         else:
-#             print("\n\t╔═════════════════════════════╗")
-#             print("\t║  Usuario no encontrado.     ║")
-#             print("\t╚═════════════════════════════╝\n")
-
