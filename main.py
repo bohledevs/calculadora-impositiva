@@ -263,7 +263,13 @@ def crear_pdf_error(id_error, fecha, usuario, descripcion_error):
 ## PROGRAMA PRINCIPAL
 def programa_principal():
     try:
-        login.iniciar_sesion()
+        usuario = login.menu()
+        print(usuario)
+        if not usuario:
+            print("Finalizando el programa. Adiós.")
+            return
+        
+        # login.iniciar_sesion()
         datos_transaccion = obtener_entrada()
         impuestos_aplicados = calcular_impuestos(datos_transaccion)
         resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
@@ -273,7 +279,7 @@ def programa_principal():
         # Obtener detalles del error
         id_error = random.randint(1000, 9999)  # ID de error aleatorio
         fecha_error = obtener_fecha()
-        usuario = "usuario_test"  # Aquí deberías agregar la variable del usuario actual, si es posible.
+        usuario = usuario["nombre"]  # Aquí deberías agregar la variable del usuario actual, si es posible.
         descripcion_error = str(e)  # Convertir el error a una cadena
         
         # Crear el PDF con los detalles del error
