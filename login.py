@@ -1,4 +1,5 @@
 import csv
+import re
 
 #Ruta del archivo CSV donde se guardaran los datos de los usuarios.
 archivo_csv = "usuario.csv"
@@ -20,25 +21,24 @@ def inicializar_archivo():
 
 # Esta funcion valida el nombre de usuario para que tenga entre 3 y 15 caracteres alfanuméricos.
 def validar_nombre_usuario(nombre):
-    if len(nombre) < 3 or len(nombre) > 15:
-        return False #El nombre es inválido si tiene menos de 3 o más de 15 caracteres
-    for caracter in nombre:
-        #Validamos manualmente si cada carácter es alfanumérico
-        if not ('a' <= caracter <= 'z' or 'A' <= caracter <= 'Z' or '0' <= caracter <= '9'):
-            return False
-    return True 
+    # La expresión regular valida que el nombre tenga entre 3 y 15 caracteres
+    # y que solo contenga letras (mayúsculas o minúsculas), sin números
+    patron = r'^[a-zA-Z]{3,15}$'
+    
+    if re.match(patron, nombre):
+        return True
+    else:
+        return False
 
 # Esta funcion valida la contraseña para que cumpla con los requisitos de tener al menos 6 caracteres y contener al menos un número.
 def validar_contrasena(contrasena):
-    if len(contrasena) < 6:
-        return False #La contraseña es inválida si tiene menos de 6 caracteres
-    tiene_numero = False
-    for caracter in contrasena:
-        #Buscamos al menos un número en la contraseña
-        if '0' <= caracter <= '9':
-            tiene_numero = True
-            break
-    return tiene_numero
+    # La expresión regular valida que la contraseña tenga al menos 6 caracteres y contenga al menos un número
+    patron = r'^(?=.*\d).{6,}$'
+    
+    if re.match(patron, contrasena):
+        return True
+    else:
+        return False
 
 #Funcion para registrar un nuevo usuario. Permite registrar un nombre de usuario, contraseña, pregunta de recuperación, respuesta de recuperación y domicilio.
 def registrar():
@@ -85,15 +85,13 @@ def login():
         for linea in lineas[1:]: #Omitimos los encabezado
             datos = linea.strip().split(',')
             if datos[1] == nombre and datos[2] == contrasena:
-                print(f"Bienvenido, {nombre}!")
-                return {
-                    "id_usuario": datos[0],
-                    "nombre_usuario": datos[1],
-                    "contraseña": datos[2],
-                    "preg_recup": datos[3],
-                    "resp_recup": datos[4],
+                datos_usuario = {
+                    "nombre": datos[1],
+                    "id": int(datos[0]),
                     "domicilio": datos[5]
                 }
+                print(f"Bienvenido, {datos_usuario['nombre']}! ID: {datos_usuario['id']}, Domicilio: {datos_usuario['domicilio']}")
+                return datos_usuario
     print("Nombre de usuario o contraseña incorrectos.")
     return None
 
