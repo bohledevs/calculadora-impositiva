@@ -289,7 +289,6 @@ def programa_principal():
         usuario = login.menu()
         print(usuario)
         if not usuario:
-            print("Finalizando el programa. Adiós.")
             return
         op = mostrar_menu_principal()
         if (1 == op):

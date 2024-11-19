@@ -61,7 +61,7 @@ def escribir_factura(resumen_transaccion, filename):
         file.write("=" * 50 + "\n")
 
 def crear_directorios(nombre_usuario, fecha):
-    fecha_str = str(fecha).split('T')[0]  # '19-11-2024'
+    fecha_str = str(fecha).split('_')[0]  # '19-11-2024'
     dia, mes, year = fecha_str.split('-')
 
     directory = f"{nombre_usuario}/{year}/{mes}"
@@ -100,7 +100,7 @@ def mostrar_menu_facturas():
     "Salir"
     )
 
-    mostrar_banner()
+    mostrar_banner("FACTURACIÓN")
     print(imprimir_tupla(opciones))
     print("=" * 50)
     op = int(input("Ingrese su opción: "))
@@ -120,9 +120,15 @@ def buscar_ruta():
     ruta = buscar_factura(".", filename)
     if ruta != None:
         print(f"Su factura se encuentra en: {ruta}")
+
+        with open(ruta, "r", encoding="UTF-8") as file:
+            contenido = file.read()
+
+            lineas = contenido.split("\n")
+            for linea in lineas:
+                print(linea)
     else:
         print("No se encontró su factura.")
-
 
 def buscar_factura(root_folder, filename):
 
