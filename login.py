@@ -78,22 +78,25 @@ def registrar():
 def login():
     nombre = input("Ingrese su nombre de usuario: ")
     contrasena = input("Ingrese su contraseña: ")
+    
+    usuario = None
 
-    #Leer el archivo y buscar las credenciales 
+    # Leer el archivo CSV y buscar las credenciales
     with open(archivo_csv, 'r', encoding='utf-8') as archivo:
         lineas = archivo.readlines()
-        for linea in lineas[1:]: #Omitimos los encabezado
+        for linea in lineas[1:]:  # Omitimos los encabezados
             datos = linea.strip().split(',')
             if datos[1] == nombre and datos[2] == contrasena:
-                datos_usuario = {
+                usuario = {
                     "nombre": datos[1],
                     "id": int(datos[0]),
                     "domicilio": datos[5]
                 }
-                print(f"Bienvenido, {datos_usuario['nombre']}! ID: {datos_usuario['id']}, Domicilio: {datos_usuario['domicilio']}")
-                return datos_usuario
+                print(f"Bienvenido, {usuario['nombre']}! ID: {usuario['id']}, Domicilio: {usuario['domicilio']}")
+                return usuario
     print("Nombre de usuario o contraseña incorrectos.")
-    return None
+    return usuario
+
 
 #Funcion para recuperar contraseña. Permite a un usuario recuperar su contraseña si responde correctamente a la pregunta de recuperación.
 def recuperar_contrasena():
@@ -118,7 +121,9 @@ def recuperar_contrasena():
 #Menu principal.
 def menu():
     inicializar_archivo()
-    while True:
+    usuario_autenticado = None
+    
+    while usuario_autenticado == None:
         print("\n--- Menú ---")
         print("1. Registrarse ")
         print("2. Login")
@@ -129,14 +134,12 @@ def menu():
         if opcion == '1':
             registrar()
         elif opcion == '2':
-            login()
+            usuario = login() 
+            return usuario
         elif opcion == '3':
             recuperar_contrasena()
         elif opcion == '4':
             print("Saliendo del programa...")
-            break
+            return None
         else:
             print("Opción inválida.")
-
-#Ejecutar el programa
-menu()
