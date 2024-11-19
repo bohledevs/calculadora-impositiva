@@ -1,11 +1,41 @@
 from facturacion import imprimir_factura
-from facturacion import obtener_nombre
+from facturacion import buscar_factura
 import os
 
 def test_imprimir_factura():
     
+    nombre_factura = test_obtener_nombre()
+
+    try:
+            file = open(nombre_factura, "r", encoding="UTF-8")
+            content = file.readlines()
+            num_lineas = len(content)
+            assert num_lineas == 18
+            file.close()
+            #os.remove(nombre_factura)
+    except FileNotFoundError:
+            assert False, f"No se creo el archivo de la factura {nombre_factura}."
+    
+    print("test_facturacion ejecutado con exito.")
+
+
+def test_buscar_factura():
+
+  nombre_factura = test_obtener_nombre()
+
+  try:
+    filepath = buscar_factura(".", nombre_factura)
+    assert filepath == "Juan Perez/2024/11/transaccion_Juan-Perez_19-11-2024T15-30-00.txt"
+    os.remove(filepath)
+  except FileNotFoundError:
+    assert False, f"No se encontró el archivo de la factura {nombre_factura}."
+    
+  print("test_facturacion ejecutado con exito.")
+
+
+def test_obtener_nombre():
     resumen_transaccion = {
-        "usuario": {"nombre": "Juan Perez"},
+        "usuario": {"nombre": "Juan Perez", "domicilio": "Azcuenaga 1532 CABA"},
         "fecha": "19-11-2024T15-30-00",
         "condicion_fiscal_iva": "Responsable Inscripto",
         "monto": 3150,
@@ -23,25 +53,4 @@ def test_imprimir_factura():
         ]
     }
     
-    nombre_factura = imprimir_factura(resumen_transaccion)
-
-    try:
-            file = open(nombre_factura, "r", encoding="UTF-8")
-            content = file.readlines()
-            num_lineas = len(content)
-            assert num_lineas == 18
-            file.close()
-            os.remove(nombre_factura)
-    except FileNotFoundError:
-            assert False, "No se creo el archivo de la factura."
-    
-    print("test_facturacion ejecutado con exito.")
-    
-def test_obtener_nombre():
-    resumen_transaccion = {
-        "usuario": {"nombre": "Juan Perez"},
-        "fecha": "19-11-2024"
-    }
-    resultado = obtener_nombre(resumen_transaccion)
-    assert resultado == "transaccion_Juan-Perez_19-11-2024.txt"
-
+    return imprimir_factura(resumen_transaccion)
