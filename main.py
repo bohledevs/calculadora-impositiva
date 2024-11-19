@@ -235,7 +235,6 @@ def imprimir_resumen(resumen):
         print(f"  - Tasa: {tasa}%")
         print(f"  - Monto del impuesto: ${monto_impuesto:.2f}\n")
         
-        
 # Funcion para crear carpeta con los errores si no existe
 def crear_carpeta_errores(nombre_carpeta):
     if not os.path.exists(nombre_carpeta):
@@ -260,7 +259,6 @@ def crear_pdf_error(id_error, fecha, usuario, descripcion_error):
     
     c.save()
     print(f"Error registrado en el archivo {nombre_pdf}")
-    
 
 ## PROGRAMA PRINCIPAL
 def programa_principal():
@@ -280,6 +278,7 @@ def programa_principal():
         
         # Crear el PDF con los detalles del error
         crear_pdf_error(id_error, fecha_error, usuario, descripcion_error)
+
         print("Se generó un archivo PDF con los detalles del error.")
-        
+
 programa_principal()
