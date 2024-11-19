@@ -6,11 +6,11 @@ import login
 import csv
 from llaves import *
 from datetime import datetime
-
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
+from facturacion import mostrar_menu_facturas
 import os
-# from facturacion import imprimir_factura
+from facturacion import imprimir_factura
 
 # Tupla de provincias argentinas
 provincias_argentina = (
@@ -202,9 +202,10 @@ def calcular_iibb(monto, cf, provincia):
     return resumen
 
 # Amalgama los datos de la transaccion en una sola salida
-def obtener_resumen(datos_transaccion, impuestos_aplicados):
+def obtener_resumen(datos_transaccion, impuestos_aplicados, usuario):
     resumen = datos_transaccion.copy()
     resumen[IMPUESTOS_APLICADOS] = impuestos_aplicados
+    resumen[LLAVE_USUARIO] = usuario
     return resumen
 
 #Funcion para imprimir el resumen de una transaccion.
@@ -261,22 +262,26 @@ def crear_pdf_error(id_error, fecha, usuario, descripcion_error):
     c.save()
     print(f"Error registrado en el archivo {nombre_pdf}")
     
-opciones = (
+
+ 
+def mostrar_banner(titulo):
+    print("=" * 50)
+    print(" " * 10 + titulo)
+    print("=" * 50)
+ 
+def mostrar_menu_principal():
+    
+    opciones = (
     "Calcular impuestos",
     "Ver mis facturas",
     "Salir"
-)
- 
-def mostrar_banner():
-    print("=" * 50)
-    print(" " * 10 + "Calculadora Impositiva")
-    print("=" * 50)
- 
-def mostrar_menu():
-    mostrar_banner()
+    )
+
+    mostrar_banner("Calculadora Impositiva")
     print(imprimir_tupla(opciones))
     print("=" * 50)
     return int(input("Ingrese su opción: "))
+
 
 ## PROGRAMA PRINCIPAL
 def programa_principal():
@@ -286,16 +291,15 @@ def programa_principal():
         if not usuario:
             print("Finalizando el programa. Adiós.")
             return
-        
-        op = mostrar_menu()
+        op = mostrar_menu_principal()
         if (1 == op):
             datos_transaccion = obtener_entrada()
             impuestos_aplicados = calcular_impuestos(datos_transaccion)
-            resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
+            resumen = obtener_resumen(datos_transaccion, impuestos_aplicados, usuario)
             imprimir_resumen(resumen)
-            #imprimir_factura(resumen)
+            imprimir_factura(resumen)
         elif (2 == op):
-            print("WIP")
+            mostrar_menu_facturas()
         elif (3 == op):
             print("Finalizando programa.")
         else:
