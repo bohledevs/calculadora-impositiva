@@ -20,12 +20,9 @@ def test_imprimir_factura():
 
 
 def test_buscar_factura():
-
-  nombre_factura = test_obtener_nombre()
-
   try:
-    filepath = buscar_factura(".", nombre_factura)
-    assert filepath == "Juan Perez/2024/11/transaccion_Juan-Perez_19-11-2024T15-30-00.txt"
+    filepath = buscar_factura(".", "transaccion.txt")
+    assert filepath == ".\Juan_Perez\\2024\\11\\transaccion.txt"
     os.remove(filepath)
   except FileNotFoundError:
     assert False, f"No se encontró el archivo de la factura {nombre_factura}."

@@ -81,6 +81,49 @@ def existe_directorio(path):
     # Check if the given path is a directory
     return os.path.isdir(path)
 
+def mostrar_banner(titulo):
+    print("=" * 50)
+    print(" " * 10 + titulo)
+    print("=" * 50)
+
+def imprimir_tupla(tupla):
+    resultado = ""
+    for indice, elemento in enumerate(tupla):
+        resultado += f"{indice + 1}. {elemento}\n"
+    return resultado
+
+def mostrar_menu_facturas():
+
+    opciones = (
+    "Ver mis facturas",
+    "Buscar una factura",
+    "Salir"
+    )
+
+    mostrar_banner()
+    print(imprimir_tupla(opciones))
+    print("=" * 50)
+    op = int(input("Ingrese su opción: "))
+
+    if (op == 1):
+        print("WIP")
+    elif (op == 2):
+        buscar_ruta()
+    elif (op == 3):
+        print("Finalizando Búsqueda")
+    else:
+        raise IndexError(f"Opción ingresada inválida: {op}")
+
+
+def buscar_ruta():
+    filename = input("Ingrese el nombre del archivo:")
+    ruta = buscar_factura(".", filename)
+    if ruta != None:
+        print(f"Su factura se encuentra en: {ruta}")
+    else:
+        print("No se encontró su factura.")
+
+
 def buscar_factura(root_folder, filename):
 
     entries = os.listdir(root_folder)  # List all entries in the folder
