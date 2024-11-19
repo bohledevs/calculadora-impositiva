@@ -1,0 +1,26 @@
+@startjson
+{
+   "monto_transaccion":12000,
+   "condicion_fiscal_iva": "Responsable Inscripto",
+   "condicion_fiscal_iibb": "Multilateral",
+   "provincia": "Buenos Aires",
+   "impuestos_aplicados": [
+     {
+        "nombre_impuesto": "IVA",
+        "alicuota": 10.50,
+        "monto_gravado": 1260.00
+     },
+     {
+        "nombre_impuesto": "Ganancias",
+        "alicuota": 2.00,
+        "monto_gravado": 240.00
+     },
+     {
+        "nombre_impuesto": "Ingresos Brutos",
+        "alicuota": 2.50,
+        "monto_gravado": 300.00
+     }
+   ],
+   "monto_neto:": 10200
+}
+@endjson

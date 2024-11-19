@@ -1,0 +1,19 @@
+@startuml
+start
+
+: Ingresar datos 
+- provincia del vendedor (prov)
+- condicion fiscal iibb (cf);
+
+:Buscar alicuotas de la provincia;
+
+switch (condicion fiscal?)
+case ( cf = local )
+  :Aplicar alicuota local;
+case ( cf = multilateral ) 
+  :Aplicar alicuota multilateral;
+case ( cf = no inscripto )
+  :Aplicar alicuota no inscripto;
+endswitch
+stop
+@enduml
