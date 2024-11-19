@@ -8,7 +8,7 @@ def iniciar_sesion():
     print("\t║       Iniciar Sesión        ║")
     print("\t╚═════════════════════════════╝\n")
 
-    usuarioLogeado = True
+    usuarioLogeado = False
 
     while usuarioLogeado == False:
 

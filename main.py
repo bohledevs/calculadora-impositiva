@@ -4,20 +4,8 @@ import random
 import copy
 import login
 import csv
-
-# Llaves de la entrada
-LLAVE_CF_IVA = "condicion_fiscal_iva"
-LLAVE_CF_IIBB = "condicion_fiscal_iibb"
-LLAVE_MONTO = "monto"
-LLAVE_PROVINCIA = "provincia"
-
-# Llaves de la salida
-LLAVE_TASA = "tasa"
-LLAVE_IMPUESTO = "impuesto"
-LLAVE_TITULO = "titulo"
-
-# Llaves del resumen
-IMPUESTOS_APLICADOS = "impuestos_aplicados"
+from llaves import *
+from facturacion import imprimir_factura
 
 # Tupla de provincias argentinas
 provincias_argentina = (
@@ -107,6 +95,8 @@ def obtener_entrada():
 
     datos_transaccion[LLAVE_PROVINCIA] = provincia
 
+    datos_transaccion[LLAVE_FECHA] = obtener_fecha()
+
     return datos_transaccion
     
 
@@ -118,6 +108,9 @@ def imprimir_tupla(tupla):
         resultado += f"{indice + 1}. {elemento}\n"
     return resultado
 
+def obtener_fecha():
+    fecha_actual = datetime.now()
+    return fecha_actual.strftime('%d-%m-%YT%H-%M-%S')
 
 # Recibe los datos del usuario y retorna los impuestos aplicados
 # Ingresa un diccionario con los datos de la transacción y retorna una lista con los impuestos aplicados
@@ -191,6 +184,7 @@ def calcular_iibb(monto, cf, provincia):
         for row in reader:
             matriz.append([float(valor) for valor in row])  # Convertir los valores a enteros
 
+
     indice_jurisdiccion = provincias_argentina.index(provincia)
     indice_cf = condiciones_iibb.index(cf)
     
@@ -245,6 +239,7 @@ def programa_principal():
         impuestos_aplicados = calcular_impuestos(datos_transaccion)
         resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
         imprimir_resumen(resumen)
+        #imprimir_factura(resumen)
     except:
         print("Error")
         
