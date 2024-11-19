@@ -12,6 +12,7 @@ LLAVE_TITULO = "titulo"
 
 # Llaves del resumen
 IMPUESTOS_APLICADOS = "impuestos_aplicados"
+IMPUESTOS_AGREGADOS = "impuestos_agregados"
 
 # Llaves del usuario
 LLAVE_USUARIO = "usuario"
