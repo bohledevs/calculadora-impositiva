@@ -21,8 +21,7 @@ def inicializar_archivo():
 
 # Esta funcion valida el nombre de usuario para que tenga entre 3 y 15 caracteres alfanuméricos.
 def validar_nombre_usuario(nombre):
-    # La expresión regular valida que el nombre tenga entre 3 y 15 caracteres
-    # y que solo contenga letras (mayúsculas o minúsculas), sin números
+    # La expresión regular valida que el nombre tenga entre 3 y 15 caracteres y que solo contenga letras (mayúsculas o minúsculas), sin números
     patron = r'^[a-zA-Z]{3,15}$'
     
     if re.match(patron, nombre):
