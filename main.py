@@ -6,6 +6,7 @@ import login
 import csv
 from llaves import *
 from facturacion import imprimir_factura
+from datetime import datetime
 
 # Tupla de provincias argentinas
 provincias_argentina = (
@@ -239,8 +240,9 @@ def programa_principal():
         impuestos_aplicados = calcular_impuestos(datos_transaccion)
         resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
         imprimir_resumen(resumen)
+        print ("AAAA ", resumen)
         #imprimir_factura(resumen)
-    except:
-        print("Error")
+    except Exception as e:
+        print("Error", e)
         
 programa_principal()

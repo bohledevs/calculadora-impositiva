@@ -1,5 +1,5 @@
-from datetime import datetime
 from llaves import *
+import os
 
 def imprimir_factura(resumen_transaccion):
     try:
@@ -26,38 +26,64 @@ def obtener_nombre(resumen_transaccion):
     return nombre_formateado
 
 def escribir_factura(resumen_transaccion, filename):
-    usuario = resumen_transaccion[LLAVE_USUARIO]
+    nombre_usuario = resumen_transaccion["usuario"]["nombre"]
+    fecha = resumen_transaccion["fecha"]
+    directorio = crear_directorios(nombre_usuario, fecha)
 
-    file = open(filename, "w", encoding="UTF-8")
-    file.write("=" * 50 + "\n")
-    file.write(" " * 15 + "FACTURA B" + "\n")
-    file.write("=" * 50 + "\n")
-    file.write(f"Nombre: {resumen_transaccion[LLAVE_USUARIO][LLAVE_NOMBRE]}\n")
-    file.write(f"Domicilio: {usuario}\n")
-    file.write(f"Condición IVA: {resumen_transaccion[LLAVE_CF_IVA]}\n")
-    file.write(f"Fecha: {resumen_transaccion[LLAVE_FECHA]}\n")
-    file.write("-" * 50 + "\n")
-    file.write(f"{'Item':<20}{'Unidad (%)':<20}{'Monto ($)':<10}\n")
-    file.write("-" * 50 + "\n")
+    file_path = f"{directorio}/{filename}"
 
-    total_neto = resumen_transaccion[LLAVE_MONTO]
-    total_impuesto = 0
+    with open(file_path, "w", encoding="UTF-8") as file:
+        file.write("=" * 50 + "\n")
+        file.write(" " * 15 + "FACTURA B" + "\n")
+        file.write("=" * 50 + "\n")
+        file.write(f"Nombre: {resumen_transaccion['usuario']['nombre']}\n")
+        file.write(f"Domicilio: {resumen_transaccion['usuario']['domicilio']}\n")
+        file.write(f"Condición IVA: {resumen_transaccion['condicion_fiscal_iva']}\n")
+        file.write(f"Fecha: {resumen_transaccion['fecha']}\n")
+        file.write("-" * 50 + "\n")
+        file.write(f"{'Item':<20}{'Unidad (%)':<20}{'Monto ($)':<10}\n")
+        file.write("-" * 50 + "\n")
 
-    file.write(f"{"Venta":<20}{100:<20}{total_neto:<10.2f}\n")
+        total_neto = resumen_transaccion["monto"]
+        total_impuesto = 0
 
-    for impuesto in resumen_transaccion[IMPUESTOS_APLICADOS]:
-        nombre = impuesto[LLAVE_TITULO]
-        tasa = impuesto[LLAVE_TASA]
-        monto = impuesto[LLAVE_IMPUESTO]
-            
-        total_impuesto += monto
-            
-        file.write(f"{nombre:<20}{tasa:<20}{-monto:<10.2f}\n")
+        file.write(f"{'Venta':<20}{100:<20}{total_neto:<10.2f}\n")
+
+        for impuesto in resumen_transaccion["impuestos_aplicados"]:
+            nombre = impuesto["titulo"]
+            tasa = impuesto["tasa"]
+            monto = impuesto["impuesto"]
+            total_impuesto += monto
+
+            file.write(f"{nombre:<20}{tasa:<20}{-monto:<10.2f}\n")
 
         file.write("-" * 50 + "\n")
         file.write(f"{'Total Neto:':<40}${total_neto:<10.2f}\n")
         file.write(f"{'Impuestos:':<40}${total_impuesto:<10.2f}\n")
         file.write(f"{'Total a Pagar:':<40}${total_neto + total_impuesto:<10.2f}\n")
         file.write("=" * 50 + "\n")
-    
-    file.close()
+
+    return file_path
+
+def crear_directorios(nombre_usuario, fecha):
+    fecha_str = str(fecha).split('T')[0]  # '19-11-2024'
+    day, month, year = fecha_str.split('-')
+
+    # Create the directory structure as a string: usuario/year/month/
+    directory = f"{nombre_usuario}/{year}/{month}"
+
+    # Create directories if they don't exist
+    if not is_directory_exists(nombre_usuario):
+        os.makedirs(nombre_usuario)
+
+    if not is_directory_exists(f"{nombre_usuario}/{year}"):
+        os.makedirs(f"{nombre_usuario}/{year}")
+
+    if not is_directory_exists(f"{nombre_usuario}/{year}/{month}"):
+        os.makedirs(f"{nombre_usuario}/{year}/{month}")
+
+    return f"{nombre_usuario}/{year}/{month}"
+
+def is_directory_exists(path):
+    # Check if the given path is a directory
+    return os.path.isdir(path)
