@@ -240,7 +240,6 @@ def programa_principal():
         impuestos_aplicados = calcular_impuestos(datos_transaccion)
         resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
         imprimir_resumen(resumen)
-        print ("AAAA ", resumen)
         #imprimir_factura(resumen)
     except Exception as e:
         print("Error", e)

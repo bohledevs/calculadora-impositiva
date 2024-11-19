@@ -1,0 +1,45 @@
+# Bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# Test cache directory
+.cache/
+
+# Pytest specific - the default pytest cache directory
+pytest_cache/
+
+# Logs
+*.log
+
+# Coverage reports
+.coverage
+*.cover
+*.py,cover
+
+# Test result files
+nosetests.xml
+test*.xml
+*.lint
+
+# Virtual environments (if you're using one)
+venv/
+env/
+.venv/
+.env/
+
+# IDE files (if using IDEs like PyCharm, VSCode, etc.)
+.vscode/
+.idea/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Python environment
+*.pdb
+*.db
+
+# Jupyter Notebook files
+.ipynb_checkpoints/
