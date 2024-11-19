@@ -203,34 +203,6 @@ def calcular_iibb(monto, cf, provincia):
 
     return resumen
 
-#Genera un valor de alícuota ficticio.
-#Retorna un valor de alícuota entre 0.2 y 7.0
-def crearMatrizAlicuotas():
-
-    matriz = []
-    filas = 23
-    columnas = 3
-
-    for i in range (filas):
-        fila = []
-        for j in range(columnas):
-            # Generar valores de alicoutas random y ordenarlos de mayor a menos
-            valores = [generarValoresAlicoutas() for _ in range(3)]
-            valores.sort()
-
-            #  Agregar los valores a la fila
-            fila = [valores[2], valores[1], valores[0]] 
-
-        matriz.append(fila)
-    return matriz
-
-# Funcion para generar valores de alicuotas ficticios
-def generarValoresAlicoutas():
-
-    alicouta = round(random.uniform(0.2, 7), 1)
-
-    return alicouta   
-
 # Amalgama los datos de la transaccion en una sola salida
 def obtener_resumen(datos_transaccion, impuestos_aplicados):
     resumen = datos_transaccion.copy()
