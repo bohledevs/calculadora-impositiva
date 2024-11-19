@@ -5,7 +5,11 @@ import copy
 import login
 import csv
 from llaves import *
-from facturacion import imprimir_factura
+from datetime import datetime
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import os
+# from facturacion import imprimir_factura
 
 # Tupla de provincias argentinas
 provincias_argentina = (
@@ -110,7 +114,7 @@ def imprimir_tupla(tupla):
 
 def obtener_fecha():
     fecha_actual = datetime.now()
-    return fecha_actual.strftime('%d-%m-%YT%H-%M-%S')
+    return fecha_actual.strftime('%Y-%m-%d_%H-%M-%S')
 
 # Recibe los datos del usuario y retorna los impuestos aplicados
 # Ingresa un diccionario con los datos de la transacción y retorna una lista con los impuestos aplicados
@@ -230,19 +234,81 @@ def imprimir_resumen(resumen):
         print(f"{titulo}:")
         print(f"  - Tasa: {tasa}%")
         print(f"  - Monto del impuesto: ${monto_impuesto:.2f}\n")
-
-
+        
+# Funcion para crear carpeta con los errores si no existe
+def crear_carpeta_errores(nombre_carpeta):
+    if not os.path.exists(nombre_carpeta):
+        os.makedirs(nombre_carpeta)
+        
+# Funcion para crear PDF de error
+def crear_pdf_error(id_error, fecha, usuario, descripcion_error):
+    nombre_carpeta = "errores"
+    crear_carpeta_errores(nombre_carpeta)
+    
+    nombre_pdf = f"error_{id_error}_{fecha}.pdf"
+    ruta_archivo = os.path.join(nombre_carpeta, nombre_pdf)  # Ruta completa del archivo
+    
+    c = canvas.Canvas(ruta_archivo)
+    
+    # Título del PDF
+    c.setFont("Helvetica", 12)
+    c.drawString(72, 750, f"ID de Error: {id_error}")
+    c.drawString(72, 735, f"Fecha: {fecha}")
+    c.drawString(72, 720, f"Usuario: {usuario}")
+    c.drawString(72, 705, f"Descripción del Error: {descripcion_error}")
+    
+    c.save()
+    print(f"Error registrado en el archivo {nombre_pdf}")
+    
+opciones = (
+    "Calcular impuestos",
+    "Ver mis facturas",
+    "Salir"
+)
+ 
+def mostrar_banner():
+    print("=" * 50)
+    print(" " * 10 + "Calculadora Impositiva")
+    print("=" * 50)
+ 
+def mostrar_menu():
+    mostrar_banner()
+    print(imprimir_tupla(opciones))
+    print("=" * 50)
+    return int(input("Ingrese su opción: "))
 
 ## PROGRAMA PRINCIPAL
 def programa_principal():
     try:
-        login.iniciar_sesion()
-        datos_transaccion = obtener_entrada()
-        impuestos_aplicados = calcular_impuestos(datos_transaccion)
-        resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
-        imprimir_resumen(resumen)
-        #imprimir_factura(resumen)
-    except:
-        print("Error")
+        usuario = login.menu()
+        print(usuario)
+        if not usuario:
+            print("Finalizando el programa. Adiós.")
+            return
         
+        op = mostrar_menu()
+        if (1 == op):
+            datos_transaccion = obtener_entrada()
+            impuestos_aplicados = calcular_impuestos(datos_transaccion)
+            resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
+            imprimir_resumen(resumen)
+            #imprimir_factura(resumen)
+        elif (2 == op):
+            print("WIP")
+        elif (3 == op):
+            print("Finalizando programa.")
+        else:
+            raise IndexError(f"No eligió una opción válida:{op}")
+    except Exception as e:
+        # Obtener detalles del error
+        id_error = random.randint(1000, 9999)  # ID de error aleatorio
+        fecha_error = obtener_fecha()
+        usuario = usuario["nombre"]  # Aquí deberías agregar la variable del usuario actual, si es posible.
+        descripcion_error = str(e)  # Convertir el error a una cadena
+        
+        # Crear el PDF con los detalles del error
+        crear_pdf_error(id_error, fecha_error, usuario, descripcion_error)
+
+        print("Se generó un archivo PDF con los detalles del error.")
+
 programa_principal()
