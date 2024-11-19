@@ -249,6 +249,8 @@ def crear_pdf_error(id_error, fecha, usuario, descripcion_error):
     c.save()
     print(f"Error registrado en el archivo {nombre_pdf}")
 
+
+
 ## PROGRAMA PRINCIPAL
 def programa_principal():
     try:
