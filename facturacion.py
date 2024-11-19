@@ -80,3 +80,18 @@ def crear_directorios(nombre_usuario, fecha):
 def existe_directorio(path):
     # Check if the given path is a directory
     return os.path.isdir(path)
+
+def buscar_factura(root_folder, filename):
+
+    entries = os.listdir(root_folder)  # List all entries in the folder
+
+    for entry in entries:
+        full_path = os.path.join(root_folder, entry)
+        if entry == filename:  # File is found
+            return full_path
+        elif os.path.isdir(full_path):  # If it's a directory, recurse
+            found_file = buscar_factura(full_path, filename)
+            if found_file:
+                return found_file
+
+    return None
