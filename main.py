@@ -5,7 +5,10 @@ import copy
 import login
 import csv
 from llaves import *
-from facturacion import imprimir_factura
+# from facturacion import imprimir_factura
+from datetime import datetime
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 # Tupla de provincias argentinas
 provincias_argentina = (
@@ -230,6 +233,21 @@ def imprimir_resumen(resumen):
         print(f"{titulo}:")
         print(f"  - Tasa: {tasa}%")
         print(f"  - Monto del impuesto: ${monto_impuesto:.2f}\n")
+        
+# Funcion para crear PDF con errores
+def crear_pdf_error(id_error, fecha, usuario, descripcion_error):
+    nombre_pdf = f"error_{id_error}_{fecha}.pdf"
+    c = canvas.Canvas(nombre_pdf, pagesize=letter)
+    
+    # Título del PDF
+    c.setFont("Helvetica", 12)
+    c.drawString(72, 750, f"ID de Error: {id_error}")
+    c.drawString(72, 735, f"Fecha: {fecha}")
+    c.drawString(72, 720, f"Usuario: {usuario}")
+    c.drawString(72, 705, f"Descripción del Error: {descripcion_error}")
+    
+    c.save()
+    print(f"Error registrado en el archivo {nombre_pdf}")
 
 ## PROGRAMA PRINCIPAL
 def programa_principal():
@@ -240,7 +258,14 @@ def programa_principal():
         resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
         imprimir_resumen(resumen)
         #imprimir_factura(resumen)
-    except:
-        print("Error")
+    except Exception as e:
+        # Obtener detalles del error
+        id_error = random.randint(1000, 9999)  # ID de error aleatorio
+        fecha_error = obtener_fecha()
+        usuario = "usuario_test"  # Aquí deberías agregar la variable del usuario actual, si es posible.
+        descripcion_error = str(e)  # Convertir el error a una cadena
+        
+        # Crear el PDF con los detalles del error
+        crear_pdf_error(id_error, fecha_error, usuario, descripcion_error)
         
 programa_principal()
