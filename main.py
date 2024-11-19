@@ -207,7 +207,8 @@ def obtener_resumen(datos_transaccion, impuestos_aplicados):
     resumen[IMPUESTOS_APLICADOS] = impuestos_aplicados
     resumen[IMPUESTOS_AGREGADOS] = impuestos_agregados(impuestos_aplicados)
     resumen[LLAVE_USUARIO] = usuario
-    return resumen
+    return resumen 
+
 
 #Funcion monto agregado
 def agregar_monto(datos): 
