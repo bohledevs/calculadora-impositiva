@@ -1,11 +1,12 @@
 import csv
 
-#Nombre del archivo csv
+#Ruta del archivo CSV donde se guardaran los datos de los usuarios.
 archivo_csv = "usuario.csv"
 
-# Función para inicializar el archivo si no existe
+# Esta funcion verifica si el archivo CSV existe y, si no, lo crea.
 def inicializar_archivo():
     try:
+        #Intentamos abrir el archivo en modo lectura
         with open(archivo_csv, 'r', encoding='utf-8') as archivo:
             contenido = archivo.read()
             if not contenido.strip():
@@ -17,38 +18,43 @@ def inicializar_archivo():
         with open(archivo_csv, 'w', encoding='utf-8') as archivo:
             archivo.write('id_usuario,nombre_de_usuario,contrasena,preg_recup,resp_recup\n')
 
-# Validación básica del nombre de usuario (manual)
+# Esta funcion valida el nombre de usuario para que tenga entre 3 y 15 caracteres alfanuméricos.
 def validar_nombre_usuario(nombre):
     if len(nombre) < 3 or len(nombre) > 15:
-        return False
+        return False #El nombre es inválido si tiene menos de 3 o más de 15 caracteres
     for caracter in nombre:
+        #Validamos manualmente si cada carácter es alfanumérico
         if not ('a' <= caracter <= 'z' or 'A' <= caracter <= 'Z' or '0' <= caracter <= '9'):
             return False
     return True 
 
-# Validación básica de la contraseña (manual)
+# Esta funcion valida la contraseña para que cumpla con los requisitos de tener al menos 6 caracteres y contener al menos un número.
 def validar_contrasena(contrasena):
     if len(contrasena) < 6:
-        return False
+        return False #La contraseña es inválida si tiene menos de 6 caracteres
     tiene_numero = False
     for caracter in contrasena:
+        #Buscamos al menos un número en la contraseña
         if '0' <= caracter <= '9':
             tiene_numero = True
             break
     return tiene_numero
 
-#Funcion para registrar un nuevo usuario 
+#Funcion para registrar un nuevo usuario. Permite registrar un nombre de usuario, contraseña, pregunta de recuperación, respuesta de recuperación y domicilio.
 def registrar():
+    #Pedimos al usuario que ingrese su nombre y lo validamos
     nombre = input("Ingrese su nombre de usuario: ")
     while not validar_nombre_usuario(nombre):
         print("Nombre inválido. Debe tener entre 3 y 15 caracteres alfanúmericos.")
         nombre = input("Ingrese su nombre de usuario:")
-    
+
+    #Pedimos al usuario que ingrese su contraseña y la validamos
     contrasena = input("Ingrese su contraseña: ")
     while not validar_contrasena(contrasena):
         print("Contraseña inválida. Debe tener al menos 6 caracteres y contener al menos un número.")
         contrasena = input("Ingrese su contraseña: ")
     
+    #Pedimos otros datos necesarios
     pregunta = input("Ingrese su pregunta de recuperación: ")
     respuesta = input("Ingrese su respuesta de recuperación: ")
     domicilio = input("Ingrese su domicilio: ")
@@ -57,10 +63,10 @@ def registrar():
     with open(archivo_csv, 'r', encoding='utf-8') as archivo:
         lineas = archivo.readlines()
         ultimo_id = 0
-        if len(lineas) > 1:
-            ultimo_id = int(lineas[-1].split(',')[0])
+        if len(lineas) > 1: #Si hay usuarios registrados
+            ultimo_id = int(lineas[-1].split(',')[0]) #Obtenemos el ID del último usuario
     
-    nuevo_id = ultimo_id + 1
+    nuevo_id = ultimo_id + 1 #Asignamos el nuevo ID
 
     #Escribir los datos del nuevo usuario en el archivo
     with open(archivo_csv, 'a', encoding='utf-8') as archivo:
@@ -68,7 +74,7 @@ def registrar():
 
     print("Usuario registrado exitosamente.")
 
-#Funcion para iniciar sesión
+#Funcion para iniciar sesión. Permite a un usuario iniciar sesion en sistema.
 def login():
     nombre = input("Ingrese su nombre de usuario: ")
     contrasena = input("Ingrese su contraseña: ")
@@ -91,7 +97,7 @@ def login():
     print("Nombre de usuario o contraseña incorrectos.")
     return None
 
-#Funcion para recuperar contraseña
+#Funcion para recuperar contraseña. Permite a un usuario recuperar su contraseña si responde correctamente a la pregunta de recuperación.
 def recuperar_contrasena():
     nombre = input("Ingrese su nombre de usuario: ")
 
