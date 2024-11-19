@@ -232,6 +232,8 @@ def imprimir_resumen(resumen):
         print(f"  - Tasa: {tasa}%")
         print(f"  - Monto del impuesto: ${monto_impuesto:.2f}\n")
 
+
+
 ## PROGRAMA PRINCIPAL
 def programa_principal():
     try:
