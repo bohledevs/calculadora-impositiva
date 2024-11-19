@@ -238,8 +238,14 @@ def imprimir_resumen(resumen):
         print(f"  - Monto del impuesto: ${monto_impuesto:.2f}\n")
 
 ## PROGRAMA PRINCIPAL
-login.iniciar_sesion()
-datos_transaccion = obtener_entrada()
-impuestos_aplicados = calcular_impuestos(datos_transaccion)
-resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
-imprimir_resumen(resumen)
+def programa_principal():
+    try:
+        login.iniciar_sesion()
+        datos_transaccion = obtener_entrada()
+        impuestos_aplicados = calcular_impuestos(datos_transaccion)
+        resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
+        imprimir_resumen(resumen)
+    except:
+        print("Error")
+        
+programa_principal()
