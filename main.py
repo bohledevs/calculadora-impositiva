@@ -3,6 +3,7 @@ import json
 import random
 import copy
 import login
+import csv
 from llaves import *
 from facturacion import imprimir_factura
 
@@ -93,6 +94,7 @@ def obtener_entrada():
     provincia = provincias_argentina[indice_provincia-1]
 
     datos_transaccion[LLAVE_PROVINCIA] = provincia
+
     datos_transaccion[LLAVE_FECHA] = obtener_fecha()
 
     return datos_transaccion
@@ -105,7 +107,6 @@ def imprimir_tupla(tupla):
     for indice, elemento in enumerate(tupla):
         resultado += f"{indice + 1}. {elemento}\n"
     return resultado
-
 
 def obtener_fecha():
     fecha_actual = datetime.now()
@@ -176,7 +177,14 @@ def calcular_iibb(monto, cf, provincia):
     resumen = {}
     resumen[LLAVE_TITULO] = "IIBB"
 
-    matriz = crearMatrizAlicuotas()
+    matriz = []
+    
+    with open('matriz_iibb.csv', mode='r') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            matriz.append([float(valor) for valor in row])  # Convertir los valores a enteros
+
+
     indice_jurisdiccion = provincias_argentina.index(provincia)
     indice_cf = condiciones_iibb.index(cf)
     
@@ -187,34 +195,6 @@ def calcular_iibb(monto, cf, provincia):
     resumen[LLAVE_IMPUESTO] = impuesto_aplicado
 
     return resumen
-
-#Genera un valor de alícuota ficticio.
-#Retorna un valor de alícuota entre 0.2 y 7.0
-def crearMatrizAlicuotas():
-
-    matriz = []
-    filas = 23
-    columnas = 3
-
-    for i in range (filas):
-        fila = []
-        for j in range(columnas):
-            # Generar valores de alicoutas random y ordenarlos de mayor a menos
-            valores = [generarValoresAlicoutas() for _ in range(3)]
-            valores.sort()
-
-            #  Agregar los valores a la fila
-            fila = [valores[2], valores[1], valores[0]] 
-
-        matriz.append(fila)
-    return matriz
-
-# Funcion para generar valores de alicuotas ficticios
-def generarValoresAlicoutas():
-
-    alicouta = round(random.uniform(0.2, 7), 1)
-
-    return alicouta   
 
 # Amalgama los datos de la transaccion en una sola salida
 def obtener_resumen(datos_transaccion, impuestos_aplicados):
@@ -252,9 +232,15 @@ def imprimir_resumen(resumen):
         print(f"  - Monto del impuesto: ${monto_impuesto:.2f}\n")
 
 ## PROGRAMA PRINCIPAL
-login.iniciar_sesion()
-datos_transaccion = obtener_entrada()
-impuestos_aplicados = calcular_impuestos(datos_transaccion)
-resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
-imprimir_resumen(resumen)
-#imprimir_factura(resumen)
+def programa_principal():
+    try:
+        login.iniciar_sesion()
+        datos_transaccion = obtener_entrada()
+        impuestos_aplicados = calcular_impuestos(datos_transaccion)
+        resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
+        imprimir_resumen(resumen)
+        #imprimir_factura(resumen)
+    except:
+        print("Error")
+        
+programa_principal()
