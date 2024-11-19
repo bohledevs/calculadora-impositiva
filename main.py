@@ -259,6 +259,23 @@ def crear_pdf_error(id_error, fecha, usuario, descripcion_error):
     
     c.save()
     print(f"Error registrado en el archivo {nombre_pdf}")
+    
+opciones = (
+    "Calcular impuestos",
+    "Ver mis facturas",
+    "Salir"
+)
+ 
+def mostrar_banner():
+    print("=" * 50)
+    print(" " * 10 + "Calculadora Impositiva")
+    print("=" * 50)
+ 
+def mostrar_menu():
+    mostrar_banner()
+    print(imprimir_tupla(opciones))
+    print("=" * 50)
+    return int(input("Ingrese su opción: "))
 
 ## PROGRAMA PRINCIPAL
 def programa_principal():
@@ -269,12 +286,19 @@ def programa_principal():
             print("Finalizando el programa. Adiós.")
             return
         
-        # login.iniciar_sesion()
-        datos_transaccion = obtener_entrada()
-        impuestos_aplicados = calcular_impuestos(datos_transaccion)
-        resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
-        imprimir_resumen(resumen)
-        #imprimir_factura(resumen)
+        op = mostrar_menu()
+        if (1 == op):
+            datos_transaccion = obtener_entrada()
+            impuestos_aplicados = calcular_impuestos(datos_transaccion)
+            resumen = obtener_resumen(datos_transaccion, impuestos_aplicados)
+            imprimir_resumen(resumen)
+            #imprimir_factura(resumen)
+        elif (2 == op):
+            print("WIP")
+        elif (3 == op):
+            print("Finalizando programa.")
+        else:
+            raise IndexError(f"No eligió una opción válida:{op}")
     except Exception as e:
         # Obtener detalles del error
         id_error = random.randint(1000, 9999)  # ID de error aleatorio
