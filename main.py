@@ -3,7 +3,6 @@ import json
 import random
 import copy
 import login
-import pandas
 import csv
 
 # Llaves de la entrada
