@@ -52,7 +52,7 @@ def escribir_factura(resumen_transaccion, filename):
             monto = impuesto[LLAVE_IMPUESTO]
             total_impuesto += monto
 
-            file.write(f"{nombre:<20}{tasa:<20}{-monto:<10.2f}\n")
+            file.write(f"{nombre:<20}{tasa:<20}{monto:<10.2f}\n")
 
         file.write("-" * 50 + "\n")
         file.write(f"{'Total Neto:':<40}${total_neto:<10.2f}\n")
