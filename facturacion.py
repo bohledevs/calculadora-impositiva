@@ -44,7 +44,7 @@ def crear_pdf_facturas(resumen_transaccion):
 
     # Buscar un nombre de archivo único
     while True:
-        nombre_pdf = f"{nombre_usuario}_{contador:02d}.pdf"
+        nombre_pdf = f"factura_{contador:02d}.pdf"
         ruta_archivo = os.path.join(carpeta_usuario, nombre_pdf)
         
         if not os.path.exists(ruta_archivo):
