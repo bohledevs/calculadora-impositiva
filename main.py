@@ -11,6 +11,7 @@ from reportlab.pdfgen import canvas
 from facturacion import mostrar_menu_facturas
 import os
 from facturacion import imprimir_factura
+from docx import Document
 
 # Tupla de provincias argentinas
 provincias_argentina = (
@@ -243,24 +244,33 @@ def crear_carpeta_errores(nombre_carpeta):
         os.makedirs(nombre_carpeta)
         
 # Funcion para crear PDF de error
-def crear_pdf_error(id_error, fecha, usuario, descripcion_error):
+def guardar_error(id_error, fecha, usuario, descripcion_error, filename):
     nombre_carpeta = "errores"
     crear_carpeta_errores(nombre_carpeta)
     
-    nombre_pdf = f"error_{id_error}_{fecha}.pdf"
-    ruta_archivo = os.path.join(nombre_carpeta, nombre_pdf)  # Ruta completa del archivo
-    
-    c = canvas.Canvas(ruta_archivo)
-    
-    # Título del PDF
-    c.setFont("Helvetica", 12)
-    c.drawString(72, 750, f"ID de Error: {id_error}")
-    c.drawString(72, 735, f"Fecha: {fecha}")
-    c.drawString(72, 720, f"Usuario: {usuario}")
-    c.drawString(72, 705, f"Descripción del Error: {descripcion_error}")
-    
-    c.save()
-    print(f"Error registrado en el archivo {nombre_pdf}")
+    archivo_errores = os.path.join(nombre_carpeta, "errores.docx")
+
+     # Crear o abrir el archivo de errores
+    if os.path.exists(archivo_errores):
+        # Si el archivo existe, abrirlo
+        documento = Document(archivo_errores)
+    else:
+        # Si no existe, crear uno nuevo
+        documento = Document()
+        documento.add_heading("Registro de Errores", level=1)
+
+    # Agregar un nuevo error al archivo
+    documento.add_paragraph("=" * 50)
+    documento.add_paragraph(f"ID de Error: {id_error}")
+    documento.add_paragraph(f"Fecha: {fecha}")
+    documento.add_paragraph(f"Usuario: {usuario}")
+    documento.add_paragraph(f"Descripción del Error: {descripcion_error}")
+    documento.add_paragraph("-" * 50)
+
+    # Guardar el archivo
+    documento.save(archivo_errores)
+   
+    print(f"Error registrado en el archivo {filename}")
     
 
  
@@ -309,10 +319,12 @@ def programa_principal():
         fecha_error = obtener_fecha()
         usuario = usuario["nombre"]  # Aquí deberías agregar la variable del usuario actual, si es posible.
         descripcion_error = str(e)  # Convertir el error a una cadena
+        filename = f"error_{id_error}"
+        
         
         # Crear el PDF con los detalles del error
-        crear_pdf_error(id_error, fecha_error, usuario, descripcion_error)
+        guardar_error(id_error, fecha_error, usuario, descripcion_error,filename )
 
-        print("Se generó un archivo PDF con los detalles del error.")
+        print("Se generó un archivo con los detalles del error.")
 
 programa_principal()

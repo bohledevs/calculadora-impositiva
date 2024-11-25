@@ -1,10 +1,12 @@
 from llaves import *
 import os
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 def imprimir_factura(resumen_transaccion):
     try:
         nombre_factura = obtener_nombre(resumen_transaccion)
-        escribir_factura(resumen_transaccion, nombre_factura)
+        crear_pdf_facturas(resumen_transaccion)
     except IOError:
         print("Hubo problemas con el filesystem al crear la factura.")
     except KeyError as ke:
@@ -21,11 +23,102 @@ def imprimir_factura(resumen_transaccion):
 def obtener_nombre(resumen_transaccion):
     usuario = resumen_transaccion[LLAVE_USUARIO][LLAVE_NOMBRE]
     fecha = resumen_transaccion[LLAVE_FECHA]
-    nombre = f"transaccion_{usuario}_{fecha}.txt"
+    nombre = f"transaccion_{usuario}.txt"
     nombre_formateado = nombre.replace(":", "-").replace("/", "-").replace(" ", "-")
     directorio = crear_directorios(usuario, fecha)
     file_path = f"{directorio}/{nombre_formateado}"
     return file_path
+
+def crear_carpeta_facturas(carpeta_usuario):
+    if not os.path.exists(carpeta_usuario):
+        os.makedirs(carpeta_usuario)
+
+def crear_pdf_facturas(resumen_transaccion):
+    nombre_carpeta = "facturas"
+    contador = 1
+    nombre_usuario = resumen_transaccion[LLAVE_USUARIO][LLAVE_NOMBRE]
+    carpeta_usuario = os.path.join(nombre_carpeta, nombre_usuario)
+
+    crear_carpeta_facturas(carpeta_usuario)
+    
+
+    # Buscar un nombre de archivo único
+    while True:
+        nombre_pdf = f"factura_{contador:02d}.pdf"
+        ruta_archivo = os.path.join(carpeta_usuario, nombre_pdf)
+        
+        if not os.path.exists(ruta_archivo):
+            break  # Si el archivo no existe, usamos este nombre
+        contador += 1
+    
+    try:
+        c = canvas.Canvas(ruta_archivo)
+        ancho, alto = 595, 842  # Tamaño A4 en puntos (ancho x alto)
+
+        # Coordenadas iniciales
+        x = 72  # Margen izquierdo
+        y = alto - 72  # Margen superior
+
+        # Configurar título
+        c.setFont("Helvetica-Bold", 14)
+        c.drawString(x, y, "=" * 50)
+        y -= 20  # Ajustar línea
+        c.drawString(x, y, " " * 15 + "FACTURA B")
+        y -= 20
+        c.drawString(x, y, "=" * 50)
+        y -= 30
+
+        # Información general
+        c.setFont("Helvetica", 12)
+        c.drawString(x, y, f"Nombre: {resumen_transaccion[LLAVE_USUARIO][LLAVE_NOMBRE]}")
+        y -= 20
+        c.drawString(x, y, f"Domicilio: {resumen_transaccion[LLAVE_USUARIO][LLAVE_DOMICILIO]}")
+        y -= 20
+        c.drawString(x, y, f"Condición IVA: {resumen_transaccion[LLAVE_CF_IVA]}")
+        y -= 20
+        c.drawString(x, y, f"Fecha: {resumen_transaccion[LLAVE_FECHA]}")
+        y -= 30
+
+        # Tabla de items
+        c.setFont("Helvetica-Bold", 12)
+        c.drawString(x, y, f"{'Item':<20}{'Unidad (%)':<20}{'Monto ($)':<10}")
+        y -= 20
+        c.drawString(x, y, "-" * 50)
+        y -= 20
+
+        total_neto = resumen_transaccion[LLAVE_MONTO]
+        total_impuesto = 0
+
+        c.setFont("Helvetica", 12)
+        c.drawString(x, y, f"{'Venta':<20}{100:<20}{total_neto:<10.2f}")
+        y -= 20
+
+        for impuesto in resumen_transaccion[IMPUESTOS_APLICADOS]:
+            nombre = impuesto[LLAVE_TITULO]
+            tasa = impuesto[LLAVE_TASA]
+            monto = impuesto[LLAVE_IMPUESTO]
+            total_impuesto += monto
+            c.drawString(x, y, f"{nombre:<20}{tasa:<20}{monto:<10.2f}")
+            y -= 20
+
+        # Totales
+        y -= 20
+        c.drawString(x, y, "-" * 50)
+        y -= 20
+        c.drawString(x, y, f"{'Total Neto:':<40}${total_neto:<10.2f}")
+        y -= 20
+        c.drawString(x, y, f"{'Impuestos:':<40}${total_impuesto:<10.2f}")
+        y -= 20
+        c.drawString(x, y, f"{'Total a Pagar:':<40}${total_neto + total_impuesto:<10.2f}")
+        y -= 30
+        c.drawString(x, y, "=" * 50)
+
+        c.save()
+        print(f"PDF guardado en {ruta_archivo}")
+    except IOError as e:
+        print(f"Error al escribir el archivo PDF: {e}")
+    except Exception as e:
+        print(f"Error inesperado al crear el PDF: {e}")
 
 def escribir_factura(resumen_transaccion, filename):
 
@@ -61,10 +154,9 @@ def escribir_factura(resumen_transaccion, filename):
         file.write("=" * 50 + "\n")
 
 def crear_directorios(nombre_usuario, fecha):
+
     fecha_str = str(fecha).split('_')[0]  # '19-11-2024'
     dia, mes, year = fecha_str.split('-')
-
-    directory = f"{nombre_usuario}/{year}/{mes}"
 
     if not existe_directorio(nombre_usuario):
         os.makedirs(nombre_usuario)
