@@ -1,6 +1,7 @@
 from llaves import *
 import os
 from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 def imprimir_factura(resumen_transaccion):
     try:
@@ -45,6 +46,7 @@ def crear_pdf_facturas(resumen_transaccion):
     while True:
         nombre_pdf = f"{nombre_usuario}_{contador:02d}.pdf"
         ruta_archivo = os.path.join(carpeta_usuario, nombre_pdf)
+        
         if not os.path.exists(ruta_archivo):
             break  # Si el archivo no existe, usamos este nombre
         contador += 1
