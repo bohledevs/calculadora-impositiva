@@ -10,11 +10,8 @@ from reportlab.pdfgen import canvas
 from facturacion import mostrar_menu_facturas
 import os
 from facturacion import imprimir_factura
-<<<<<<< HEAD
 from functools import reduce
-=======
 from docx import Document
->>>>>>> 4f9a708af4c7b2091cffcb971c2b2da8500add1d
 
 # Tupla de provincias argentinas
 provincias_argentina = (
