@@ -1,1 +1,3 @@
 id_usuario,nombre_de_usuario,contrasena,preg_recup,resp_recup
+1,stefano,contra123,edad?,20,av 123
+2,stefano,blabla123,Nombre de mi perro,Pluto,Ciudadela 123
