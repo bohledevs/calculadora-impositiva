@@ -14,7 +14,7 @@ from functools import reduce
 from docx import Document
 
 # Tupla de provincias argentinas
-provincias_argentina = (
+provincias_argentina = (    
     "Buenos Aires",
     "Catamarca",
     "Chaco",
