@@ -14,7 +14,7 @@ from functools import reduce
 from docx import Document
 
 # Tupla de provincias argentinas
-provincias_argentina = (
+provincias_argentina = (    
     "Buenos Aires",
     "Catamarca",
     "Chaco",
@@ -114,6 +114,7 @@ def imprimir_tupla(tupla):
         resultado += f"{indice + 1}. {elemento}\n"
     return resultado
 
+# Obtiene la fecha y hora actual en formato 'YYYY-MM-DD_HH-MM-SS'.
 def obtener_fecha():
     fecha_actual = datetime.now()
     return fecha_actual.strftime('%Y-%m-%d_%H-%M-%S')
@@ -203,7 +204,7 @@ def calcular_iibb(monto, cf, provincia):
     return resumen
   
 # Amalgama los datos de la transaccion en una sola salida
-def obtener_resumen(datos_transaccion, impuestos_aplicados):
+def obtener_resumen(datos_transaccion, impuestos_aplicados, usuario):
     resumen = datos_transaccion.copy() 
     resumen[IMPUESTOS_APLICADOS] = impuestos_aplicados
     resumen[IMPUESTOS_AGREGADOS] = impuestos_agregados(impuestos_aplicados)
@@ -213,13 +214,20 @@ def obtener_resumen(datos_transaccion, impuestos_aplicados):
 
 #Funcion monto agregado
 def agregar_monto(datos): 
-	#Se filtran elementos donde "impuesto" sea igual a 0
-	resultados_filtrados = list(filter(lambda x: x["impuesto"] == 0, datos))
-	#Usamos map para extraer solo el valor de "impuesto" de los resultados filtrados
-	impuestos_filtrados = list(map(lambda x: x["impuesto"], resultados_filtrados))
-	#Usamos reduce para sumar todos los valores del campo "impuesto" en la lista original
-	total_impuestos = reduce(lambda acc, x: acc + x["impuesto"], datos, 0)
-	return total_impuestos
+    #Se filtran elementos donde "impuesto" sea igual a 0
+    resultados_filtrados = list(filter(lambda x: x["impuesto"] == 0, datos))
+    #Usamos map para extraer solo el valor de "impuesto" de los resultados filtrados
+    impuestos_filtrados = list(map(lambda x: x["impuesto"], resultados_filtrados))
+    #Usamos reduce para sumar todos los valores del campo "impuesto" en la lista original
+    total_impuestos = reduce(lambda acc, x: acc + x["impuesto"], datos, 0)
+    return total_impuestos
+
+#Funcion para agregar impuestos
+def impuestos_agregados(impuestos_aplicados):
+    total = 0
+    for impuesto in impuestos_aplicados:
+        total += impuesto[LLAVE_IMPUESTO]
+    return total
 
 #Funcion para imprimir el resumen de una transaccion.
 def imprimir_resumen(resumen):
@@ -287,21 +295,28 @@ def guardar_error(id_error, fecha, usuario, descripcion_error, filename):
 
  
 def mostrar_banner(titulo):
+    # Imprime una línea de 50 signos de igual para crear una separación visual
     print("=" * 50)
+     # Imprime el título centrado con un margen de 10 espacios en blanco a la izquierda
     print(" " * 10 + titulo)
+     # Imprime otra línea de 50 signos de igual para cerrar la separación visual
     print("=" * 50)
  
 def mostrar_menu_principal():
-    
+    # Define una tupla con las opciones del menú principal
     opciones = (
     "Calcular impuestos",
     "Ver mis facturas",
     "Salir"
     )
 
+     # Muestra un banner con el título "Calculadora Impositiva"
     mostrar_banner("Calculadora Impositiva")
+    # Imprime las opciones del menú
     print(imprimir_tupla(opciones))
+    # Imprime una línea de 50 signos de igual para crear una separación visual
     print("=" * 50)
+    # Solicita al usuario que ingrese una opción y la retorna como un entero
     return int(input("Ingrese su opción: "))
 
 
